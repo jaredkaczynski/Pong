@@ -125,7 +125,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.TANH, 5, 10,10, 1);
 
         BackPropagation learningRule = myMlPerceptron.getLearningRule();
-        learningRule.setMaxIterations(100);
+        learningRule.setMaxIterations(5);
         learningRule.setLearningRate(0.1);
 
 		//run the game loop
@@ -142,7 +142,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			movePlayer(1);
 			movePlayer(2);
             if(b.getX() <300){
-                System.out.println("player 1");
+                //System.out.println("player 1");
 
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
                 myMlPerceptron.setInput(input);
@@ -151,7 +151,10 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 p2_up = false;
                 p1_up = false;
                 p1_down = false;
-                if(myMlPerceptron.getOutput()[0] > .5){
+                //double paddlePosition = (myMlPerceptron.getOutput()[0]);
+                //p1.setY((int) paddlePosition);
+                System.out.println(myMlPerceptron.getOutput()[0]);
+                if(myMlPerceptron.getOutput()[0] > 0){
                     p1_down = false;
                     p1_up = true;
                 } else {
@@ -159,23 +162,26 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                     p1_up = false;
                 }
                 DataSet learningData = new DataSet(5,1);
-                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{Math.abs(b.getY()-p1.getY())}));
+                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{0}));
                 myMlPerceptron.learn(learningData);
                 myMlPerceptron.stopLearning();
             }else{
-                System.out.println("player 2");
+                //System.out.println("player 2");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
                 myMlPerceptron.setInput(input);
                 myMlPerceptron.calculate();
-                if(myMlPerceptron.getOutput()[0] > .5){
-                    p2_down = false;
-                    p2_up = true;
-                } else {
+                //double paddlePosition = (myMlPerceptron.getOutput()[0]);
+                //p2.setY((int) paddlePosition);
+                System.out.println(myMlPerceptron.getOutput()[0]);
+                if(myMlPerceptron.getOutput()[0] > 0){
                     p2_down = true;
                     p2_up = false;
+                } else {
+                    p2_down = false;
+                    p2_up = true;
                 }
                 DataSet learningData = new DataSet(5,1);
-                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{Math.abs(b.getY() - p2.getY())}));
+                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{0}));
                 myMlPerceptron.learn(learningData);
                 myMlPerceptron.stopLearning();
             }
