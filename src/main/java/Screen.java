@@ -5,6 +5,7 @@
     Contact: opengamesbeginners@gmail.com
 */
 
+import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 import org.neuroph.nnet.MultiLayerPerceptron;
@@ -56,6 +57,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
     //learning stuff
     int paddleHit = 0;
+    private NeuralNetwork netWork;
 
 	//constructor
 	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board){
@@ -111,7 +113,10 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
-
+    public void runPassthrough(NeuralNetwork inputNet){
+        netWork = inputNet;
+        run();
+    }
 	public void run() {
 		// TODO Auto-generated method stub
 		
@@ -123,11 +128,6 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			
 		}
 
-        MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.TANH, 5, 10,10, 1);
-
-        BackPropagation learningRule = myMlPerceptron.getLearningRule();
-        learningRule.setMaxIterations(5);
-        learningRule.setLearningRate(0.1);
 
 		//run the game loop
 		while(true){
@@ -142,51 +142,43 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			moveBall();
 			movePlayer(1);
 			movePlayer(2);
-            /*if(b.getX() <300){
+            if(b.getX() <300){
                 //System.out.println("player 1");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                myMlPerceptron.setInput(input);
-                myMlPerceptron.calculate();
-                p2_down = false;
+                //myMlPerceptron.setInput(input);
+                //myMlPerceptron.calculate();
+                netWork.setInput(input);
+                netWork.calculate();
+                /*p2_down = false;
                 p2_up = false;
                 p1_up = false;
-                p1_down = false;
-                //double paddlePosition = (myMlPerceptron.getOutput()[0]);
-                //p1.setY((int) paddlePosition);
-                System.out.println(myMlPerceptron.getOutput()[0]);
+                p1_down = false;*/
+                System.out.println(netWork.getOutput()[0]);
 
-                if(myMlPerceptron.getOutput()[0] > 0){
+                if(netWork.getOutput()[0] > 0){
                     p1_down = false;
                     p1_up = true;
                 } else {
                     p1_down = true;
                     p1_up = false;
                 }
-                DataSet learningData = new DataSet(5,1);
-                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{}));
-                myMlPerceptron.learn(learningData);
-                myMlPerceptron.stopLearning();
-
             }else{
                 //System.out.println("player 2");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                myMlPerceptron.setInput(input);
-                myMlPerceptron.calculate();
+                System.out.println(input);
+                netWork.setInput(input);
+                netWork.calculate();
                 //double paddlePosition = (myMlPerceptron.getOutput()[0]);
                 //p2.setY((int) paddlePosition);
-                System.out.println(myMlPerceptron.getOutput()[0]);
-                if(myMlPerceptron.getOutput()[0] > 0){
+                System.out.println(netWork.getOutput()[0]);
+                if(netWork.getOutput()[0] > 0){
                     p2_down = true;
                     p2_up = false;
                 } else {
                     p2_down = false;
                     p2_up = true;
                 }
-                DataSet learningData = new DataSet(5,1);
-                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{0}));
-                myMlPerceptron.learn(learningData);
-                myMlPerceptron.stopLearning();
-            }*/
+            }
 
 			//determine if there is a winner
 			if(score.p1Wins() || score.p2Wins()){

@@ -5,6 +5,8 @@
     Contact: opengamesbeginners@gmail.com
 */
 
+import org.neuroph.core.NeuralNetwork;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -93,11 +95,11 @@ public class Board extends JFrame implements ActionListener{
 		//draw the components
 		screen = new Screen(p1, p2, b, sb, this);
 		this.getContentPane().add(screen);
-		System.out.println(fitnessValue());
+		//System.out.println(fitnessValue());
 	}
 
-	public int fitnessValue(){
-		screen.run();
+	public int fitnessValue(NeuralNetwork inputNet){
+		screen.runPassthrough(inputNet);
 		return screen.paddleHit;
 	}
 

@@ -1,6 +1,7 @@
 import com.google.common.primitives.Ints;
 import org.neuroph.contrib.neat.gen.Organism;
 import org.neuroph.contrib.neat.gen.impl.SimpleNeatParameters;
+import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
 import org.neuroph.core.NeuralNetwork;
 
@@ -58,104 +59,37 @@ public class ArtificialIntelligence {
     //speed of the ball
     private final int B_SPEED = 2;
 
-    static List<OrganismFitnessScore> fitnesses = new List<OrganismFitnessScore>() {
-        public int size() {
-            return 0;
-        }
-
-        public boolean isEmpty() {
-            return false;
-        }
-
-        public boolean contains(Object o) {
-            return false;
-        }
-
-        public Iterator<OrganismFitnessScore> iterator() {
-            return null;
-        }
-
-        public Object[] toArray() {
-            return new Object[0];
-        }
-
-        public <T> T[] toArray(T[] a) {
-            return null;
-        }
-
-        public boolean add(OrganismFitnessScore organismFitnessScore) {
-            return false;
-        }
-
-        public boolean remove(Object o) {
-            return false;
-        }
-
-        public boolean containsAll(Collection<?> c) {
-            return false;
-        }
-
-        public boolean addAll(Collection<? extends OrganismFitnessScore> c) {
-            return false;
-        }
-
-        public boolean addAll(int index, Collection<? extends OrganismFitnessScore> c) {
-            return false;
-        }
-
-        public boolean removeAll(Collection<?> c) {
-            return false;
-        }
-
-        public boolean retainAll(Collection<?> c) {
-            return false;
-        }
-
-        public void clear() {
-
-        }
-
-        public OrganismFitnessScore get(int index) {
-            return null;
-        }
-
-        public OrganismFitnessScore set(int index, OrganismFitnessScore element) {
-            return null;
-        }
-
-        public void add(int index, OrganismFitnessScore element) {
-
-        }
-
-        public OrganismFitnessScore remove(int index) {
-            return null;
-        }
-
-        public int indexOf(Object o) {
-            return 0;
-        }
-
-        public int lastIndexOf(Object o) {
-            return 0;
-        }
-
-        public ListIterator<OrganismFitnessScore> listIterator() {
-            return null;
-        }
-
-        public ListIterator<OrganismFitnessScore> listIterator(int index) {
-            return null;
-        }
-
-        public List<OrganismFitnessScore> subList(int fromIndex, int toIndex) {
-            return null;
-        }
-    };
+    static List<OrganismFitnessScore> fitnesses;
 
     public static void main(String[] args){
-        evaluate(fitnesses);
+        SimpleNeatParameters params = new SimpleNeatParameters();
+        Board test = new Board();
+        //fitnesses.add(new OrganismFitnessScore(0));
+        params.setFitnessFunction(new FitnessFunction() {
+            public void evaluate(List<OrganismFitnessScore> list) {
+                for(OrganismFitnessScore ofs : fitnesses) {
+                    Board test = new Board();
+                    Organism o = ofs.getOrganism();
+                    NeuralNetwork net = ofs.getNeuralNetwork();
+
+
+                    ofs.setFitness(test.fitnessValue(net));
+                }
+            }
+        });
+        params.setPopulationSize(5);
+        params.setMaximumFitness(1000);
+        params.setMaximumGenerations(10);
+        //evaluate(fitnesses);
+        params.getMaximumFitness();
+
+
     }
-    
+    /*public static int fitness(){
+        Board test = new Board();
+        return test.fitnessValue(n);
+    }*/
+    /*
     public static void evaluate(List<OrganismFitnessScore> fitnesses) {
         for(OrganismFitnessScore ofs : fitnesses) {
             Board test = new Board();
@@ -163,7 +97,7 @@ public class ArtificialIntelligence {
             NeuralNetwork net = ofs.getNeuralNetwork();
 
 
-            ofs.setFitness(test.fitnessValue());
+            ofs.setFitness(test.fitnessValue(net));
         }
-    }
+    }*/
 }
