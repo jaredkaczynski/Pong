@@ -5,8 +5,7 @@
     Contact: opengamesbeginners@gmail.com
 */
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -94,8 +93,14 @@ public class Board extends JFrame implements ActionListener{
 		//draw the components
 		screen = new Screen(p1, p2, b, sb, this);
 		this.getContentPane().add(screen);
+		System.out.println(fitnessValue());
 	}
-	
+
+	public int fitnessValue(){
+		screen.run();
+		return screen.paddleHit;
+	}
+
 	public String getBackgroundImage(){
 		return background_img;
 	}

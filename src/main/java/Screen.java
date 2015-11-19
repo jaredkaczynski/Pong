@@ -5,14 +5,10 @@
     Contact: opengamesbeginners@gmail.com
 */
 
-import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
-import org.neuroph.core.learning.SupervisedLearning;
 import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.util.TrainingSetImport;
 import org.neuroph.util.TransferFunctionType;
-import org.neuroph.core.learning.UnsupervisedLearning;
 import org.neuroph.nnet.learning.BackPropagation;
 
 import java.awt.Color;
@@ -21,11 +17,13 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+
+
 
 
 
@@ -55,7 +53,10 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	//other info
 	private Thread thread;
 	private boolean gameover = false;
-	
+
+    //learning stuff
+    int paddleHit = 0;
+
 	//constructor
 	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board){
 		//set player 1 information
@@ -131,19 +132,18 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		//run the game loop
 		while(true){
 			//allows for smooth motion of the game
-			/*try{
-				Thread.sleep(1);
+			try{
+				Thread.sleep(10);
 			}
 			catch(InterruptedException e){
 
 			}
-            */
+
 			moveBall();
 			movePlayer(1);
 			movePlayer(2);
-            if(b.getX() <300){
+            /*if(b.getX() <300){
                 //System.out.println("player 1");
-
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
                 myMlPerceptron.setInput(input);
                 myMlPerceptron.calculate();
@@ -154,6 +154,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 //double paddlePosition = (myMlPerceptron.getOutput()[0]);
                 //p1.setY((int) paddlePosition);
                 System.out.println(myMlPerceptron.getOutput()[0]);
+
                 if(myMlPerceptron.getOutput()[0] > 0){
                     p1_down = false;
                     p1_up = true;
@@ -162,9 +163,10 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                     p1_up = false;
                 }
                 DataSet learningData = new DataSet(5,1);
-                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{0}));
+                learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{}));
                 myMlPerceptron.learn(learningData);
                 myMlPerceptron.stopLearning();
+
             }else{
                 //System.out.println("player 2");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
@@ -184,17 +186,17 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 learningData.addRow(new DataSetRow(new double[]{b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()}, new double[]{0}));
                 myMlPerceptron.learn(learningData);
                 myMlPerceptron.stopLearning();
-            }
+            }*/
 
 			//determine if there is a winner
 			if(score.p1Wins() || score.p2Wins()){
 				gameover = true;
+                paddleHit = 0;
 				break;
 			}
 		}
         // save the trained network into file
-        //myMlPerceptron.save(“test.nnet”);
-
+        //myMlPerceptron.save(ï¿½test.nnetï¿½);
     }
 	
 	public void movePlayer(int p){
@@ -222,6 +224,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		if(b_right && hitPaddle(true)){ //hits the right paddle
 			b.setX(b.getX() - b.getSpeed());
 			b_right = false;
+            paddleHit++;
 		}
 		else if(b_right && b.getX() < (this.getWidth() - b.getWidth())){ //if moving right and not at max
 			b.setX(b.getX() + b.getSpeed());
@@ -242,6 +245,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		else if(!b_right && hitPaddle(false)){ //hits the left paddle
 			b.setX(b.getX() + b.getSpeed());
 			b_right = true;
+            paddleHit++;
 		}
 		else if(!b_right && b.getX() > 0){ //if moving left, but not at max
 			b.setX(b.getX() - b.getSpeed());
@@ -338,7 +342,8 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	}
 	
 	//method to reset the screen back to what it was before
-	public void reset(int p1y, int p1s, int p2y, int p2s, int bs){
+	public int reset(int p1y, int p1s, int p2y, int p2s, int bs){
+
 		p1.setY(p1y);
 		p2.setY(p2y);
 		
@@ -365,5 +370,8 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			thread = new Thread(this);
 			thread.start();
 		}
+        return paddleHit;
 	}
+
 }
+
