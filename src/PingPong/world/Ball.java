@@ -5,7 +5,7 @@
     Contact: opengamesbeginners@gmail.com
 */
 
-
+package PingPong.world;
 public class Ball {
 	//variables
 	//size of the ball

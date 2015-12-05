@@ -4,7 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-
+package PingPong.world;
 public class Player{
 	//variables
 	

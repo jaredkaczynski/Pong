@@ -4,7 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-
+package PingPong.world;
 import org.neuroph.core.NeuralNetwork;
 
 import java.awt.*;
@@ -48,7 +48,7 @@ public class Board extends JFrame implements ActionListener{
 	private Screen screen;
 	
 	//constructor
-	public Board(){
+	public Board(NeuralNetwork network){
 		//set the title of the frame
 		super("Paddle Ball");
 		
@@ -93,7 +93,7 @@ public class Board extends JFrame implements ActionListener{
 		this.setJMenuBar(menubar);
 		
 		//draw the components
-		screen = new Screen(p1, p2, b, sb, this);
+		screen = new Screen(p1, p2, b, sb, this, network);
 		this.getContentPane().add(screen);
 		//System.out.println(fitnessValue());
 	}

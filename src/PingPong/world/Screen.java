@@ -1,3 +1,4 @@
+package PingPong.world;
 /*
     Screen.java - Paddle Ball Game
 	Contributer(s): Ron Parrott
@@ -60,7 +61,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     private NeuralNetwork netWork;
 
 	//constructor
-	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board){
+	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board, NeuralNetwork network){
 		//set player 1 information
 		p1 = player_1;
 		
