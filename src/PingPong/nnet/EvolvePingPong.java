@@ -35,52 +35,11 @@ public class EvolvePingPong {
     public EvolvePingPong() {
     }
 
-    /*public NeatParameters createNeatParameters() {
-        SimpleNeatParameters params = new SimpleNeatParameters();
-        params.setMaximumGenerations(750);
-        params.setPopulationSize(250);
-        //params.setMaximumFitness(0);
-        params.setFitnessFunction(new PingPongFitnessFunction());
-
-        DynamicThresholdSpeciator speciator = new DynamicThresholdSpeciator();
-        speciator.setMaxSpecies(45);
-        params.setSpeciator(speciator);
-
-        NaturalSelectionOrganismSelector selector = (NaturalSelectionOrganismSelector) params
-                .getOrganismSelector();
-        selector.setKillUnproductiveSpecies(true);
-
-        List<MutationOperation> ops = new ArrayList<MutationOperation>();
-
-        AddNeuronMutationOperation addNeuron = new AddNeuronMutationOperation(
-                0.5);
-        AddConnectionMutationOperation addConnection = new AddConnectionMutationOperation(
-                0.10);
-        WeightMutationOperation weightMutation = new WeightMutationOperation(
-                0.8);
-
-        ops.add(addNeuron);
-        ops.add(addConnection);
-        ops.add(weightMutation);
-
-        params.setMutationOperators(ops);
-
-        for (ReproductionOperation op : params.getReproductionOperators()) {
-            ((AbstractReproductionOperation) op).setUseFitnessBias(false);
-        }
-
-        // if you change this to a different persistence mechanism, make sure to change the value
-        // in the replay as well.
-        params.setPersistence(new DirectoryOutputPersistence(BASE_DIRECTORY, new JavaSerializationDelegate(false)));
-        NeatParameters test = params;
-        return test;
-    }*/
-
     private void evolve() {
         try {
-
             NeatParametersBuilder.getTrainParams();
             NeatParameters params = NeatParametersBuilder.neatParameters;
+            System.out.println(params.getClass());
             Evolver ev = Evolver.createNew(params, createInputLayer(params), createOutputLayer(params));
             Organism o = ev.evolve();
         } catch (PersistenceException e) {

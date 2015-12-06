@@ -7,11 +7,6 @@ package PingPong.world;
 */
 
 import org.neuroph.core.NeuralNetwork;
-import org.neuroph.core.data.DataSet;
-import org.neuroph.core.data.DataSetRow;
-import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.util.TransferFunctionType;
-import org.neuroph.nnet.learning.BackPropagation;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +14,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -58,7 +52,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
     //learning stuff
     int paddleHit = 0;
-    private NeuralNetwork netWork;
+    private NeuralNetwork neuralNetwork;
 
 	//constructor
 	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board, NeuralNetwork network){
@@ -80,7 +74,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		//Screen details
 		this.setFocusable(true);
 		this.addKeyListener(this);
-		
+		this.neuralNetwork = network;
 		this.add(score);
 		
 		thread = new Thread(this);
@@ -114,10 +108,6 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
-    public void runPassthrough(NeuralNetwork inputNet){
-        netWork = inputNet;
-        run();
-    }
 	public void run() {
 		// TODO Auto-generated method stub
 		
@@ -148,15 +138,15 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
                 //myMlPerceptron.setInput(input);
                 //myMlPerceptron.calculate();
-                netWork.setInput(input);
-                netWork.calculate();
+                neuralNetwork.setInput(input);
+                neuralNetwork.calculate();
                 /*p2_down = false;
                 p2_up = false;
                 p1_up = false;
                 p1_down = false;*/
-                System.out.println(netWork.getOutput()[0]);
+                System.out.println(neuralNetwork.getOutput()[0]);
 
-                if(netWork.getOutput()[0] > 0){
+                if(neuralNetwork.getOutput()[0] > 0){
                     p1_down = false;
                     p1_up = true;
                 } else {
@@ -167,12 +157,12 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 //System.out.println("player 2");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
                 System.out.println(input);
-                netWork.setInput(input);
-                netWork.calculate();
+                neuralNetwork.setInput(input);
+                neuralNetwork.calculate();
                 //double paddlePosition = (myMlPerceptron.getOutput()[0]);
                 //p2.setY((int) paddlePosition);
-                System.out.println(netWork.getOutput()[0]);
-                if(netWork.getOutput()[0] > 0){
+                System.out.println(neuralNetwork.getOutput()[0]);
+                if(neuralNetwork.getOutput()[0] > 0){
                     p2_down = true;
                     p2_up = false;
                 } else {

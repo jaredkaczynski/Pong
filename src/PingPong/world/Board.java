@@ -95,12 +95,11 @@ public class Board extends JFrame implements ActionListener{
 		//draw the components
 		screen = new Screen(p1, p2, b, sb, this, network);
 		this.getContentPane().add(screen);
+
 		//System.out.println(fitnessValue());
 	}
-
-	public int fitnessValue(NeuralNetwork inputNet){
-		screen.runPassthrough(inputNet);
-		return screen.paddleHit;
+	public int fitness(){
+		return this.screen.paddleHit;
 	}
 
 	public String getBackgroundImage(){

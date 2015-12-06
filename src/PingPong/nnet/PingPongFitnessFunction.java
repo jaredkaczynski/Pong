@@ -80,8 +80,8 @@ public class PingPongFitnessFunction implements FitnessFunction {
 
         public void run() {
             Board agent = new Board(network);
-
-
+            score.setFitness(agent.fitness());
+            //score.setFitness;
             /*
             Robot agent = new Robot(network);
 			AgentWorld world = builder.createWorld();
