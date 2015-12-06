@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.nio.DoubleBuffer;
 
+import PingPong.world.Board;
 import org.apache.log4j.Logger;
 import org.jgap.BulkFitnessFunction;
 import org.jgap.Chromosome;
@@ -121,7 +122,7 @@ public class PingPongFitnessFunction {
 
     private double poleAngleThreshold = THIRTYSIX_DEGREES;
 
-    private final static Logger logger = Logger.getLogger( DoublePoleBalanceFitnessFunction.class );
+    private final static Logger logger = Logger.getLogger( Board.class );
 
     private ActivatorTranscriber factory;
 
@@ -155,6 +156,7 @@ public class PingPongFitnessFunction {
     /**
      * @see com.anji.util.Configurable#init(com.anji.util.Properties)
      */
+    /*
     public void init( Properties props ) throws Exception {
         try {
             factory = (ActivatorTranscriber) props.singletonObjectProperty( ActivatorTranscriber.class );
@@ -179,7 +181,7 @@ public class PingPongFitnessFunction {
             throw new IllegalArgumentException( "invalid properties: " + e.getClass().toString() + ": "
                     + e.getMessage() );
         }
-    }
+    }*/
 
     /**
      * @see org.jgap.BulkFitnessFunction#evaluate(java.util.List)
@@ -230,6 +232,7 @@ public class PingPongFitnessFunction {
      *
      * [5] - Pole 2 angular velocity (radians/sec).
      */
+    /*
     private double[] newState() {
         double[] state = new double[ 6 ];
         state[ 0 ] = state[ 1 ] = state[ 3 ] = state[ 5 ] = 0;
@@ -358,7 +361,8 @@ public class PingPongFitnessFunction {
         logger.debug( "trial took " + currentTimestep + " steps" );
         return fitness;
     }
-
+    */
+    /*
     private void performAction( double output, double[] state ) {
         int i;
         double[] dydx = new double[ 6 ];
@@ -366,7 +370,7 @@ public class PingPongFitnessFunction {
         boolean RK4 = true; //Set to Runge-Kutta 4th order integration method
         double EULER_TAU = TIME_DELTA / 4;
 
-	/*--- Apply action to the simulated cart-pole ---*/
+	//--- Apply action to the simulated cart-pole --
         if ( RK4 ) {
             for ( i = 0; i < 2; ++i ) {
                 dydx[ 0 ] = state[ 1 ];
@@ -388,7 +392,7 @@ public class PingPongFitnessFunction {
             }
         }
     }
-
+    */
     private void step( double action, double[] st, double[] derivs ) {
         double force, costheta_1, costheta_2, sintheta_1, sintheta_2, gsintheta_1, gsintheta_2, temp_1, temp_2, ml_1, ml_2, fi_1, fi_2, mi_1, mi_2;
 
