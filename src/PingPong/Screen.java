@@ -111,7 +111,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         catch(InterruptedException e){
 
         }
-
+        System.out.println(action + " this is the input");
         moveBall();
         movePlayer(1);
         movePlayer(2);
@@ -128,7 +128,6 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         }else{
             //System.out.println("player 2");
             double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-            System.out.println(input);
             /*
             neuralNetwork.setInput(input);
             neuralNetwork.calculate();
@@ -148,7 +147,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             gameover = true;
             //paddleHit = 0;
         }
-        double[] inputArray = {b.getY(),b.getY(),p1.getX(),p1.getY()};
+        double[] inputArray = {b.getY(),b.getY(),p1.getY()};
         return(inputArray);
     }
 	public void run() {
