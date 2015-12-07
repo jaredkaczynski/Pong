@@ -8,6 +8,7 @@ import java.util.Random;
 
 import PingPong.Board;
 import PingPong.Screen;
+import com.anji.util.Configurable;
 import com.anji.util.Properties;
 import com.anji.util.Randomizer;
 import org.apache.log4j.BasicConfigurator;
@@ -23,7 +24,7 @@ import com.anji.integration.ActivatorTranscriber;
 /**
  * Created by Jared on 06-Dec-15.
  */
-public class PingPongFitnessFunction implements BulkFitnessFunction {
+public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable {
     private final static String TRACK_LENGTH_KEY = "polebalance.track.length";
 
     private final static String TIMESTEPS_KEY = "polebalance.timesteps";
@@ -188,28 +189,6 @@ public class PingPongFitnessFunction implements BulkFitnessFunction {
             logger.warn( "error evaluating chromosome " + c.toString(), e );
             c.setFitnessValue( 0 );
         }
-    }
-
-    /**
-     * @return 6-dimensional array with the following data
-     *
-     * [0] - Cart Position (meters).
-     *
-     * [1] - Cart velocity (m/s).
-     *
-     * [2] - Pole 1 angle (radians)
-     *
-     * [3] - Pole 1 angular velocity (radians/sec).
-     *
-     * [4] - Pole 2 angle (radians)
-     *
-     * [5] - Pole 2 angular velocity (radians/sec).
-     */
-
-    private double[] newState() {
-        double[] state = new double[ 6 ];
-        state[ 0 ] = state[ 1 ] = state[ 3 ] = state[ 5 ] = 0;
-        return state;
     }
 
     private int singleTrial( Activator activator ) {
