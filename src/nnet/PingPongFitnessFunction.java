@@ -1,5 +1,6 @@
 package nnet;
 
+import java.io.Serializable;
 import java.nio.DoubleBuffer;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,7 @@ import com.anji.util.Properties;
 import com.anji.util.Randomizer;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.jgap.BulkFitnessFunction;
 import org.jgap.Chromosome;
 
 import com.anji.imaging.IdentifyImageFitnessFunction;
@@ -21,7 +23,7 @@ import com.anji.integration.ActivatorTranscriber;
 /**
  * Created by Jared on 06-Dec-15.
  */
-public class PingPongFitnessFunction {
+public class PingPongFitnessFunction implements BulkFitnessFunction {
     private final static String TRACK_LENGTH_KEY = "polebalance.track.length";
 
     private final static String TIMESTEPS_KEY = "polebalance.timesteps";
@@ -118,6 +120,8 @@ public class PingPongFitnessFunction {
     private final static int DEFAULT_NUM_TRIALS = 10;
 
     private int numTrials = DEFAULT_NUM_TRIALS;
+
+
 
 
     private final static Logger logger = Logger.getLogger( PingPongFitnessFunction.class );

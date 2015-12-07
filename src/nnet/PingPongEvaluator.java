@@ -40,9 +40,12 @@ public class PingPongEvaluator {
                 throw new IllegalArgumentException("no chromosome found: " + args[1]);
             //ff.enableDisplay();
             ff.evaluate(chrom);
-            Evolver evolver = new Evolver();
+
+            /*Evolver evolver = new Evolver();
             evolver.init( props );
+            System.out.println("Evolver");
             evolver.run();
+            System.out.println("Evolver");*/
             logger.info("Fitness = " + chrom.getFitnessValue());
         }
 
