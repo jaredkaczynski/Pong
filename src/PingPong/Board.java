@@ -45,10 +45,10 @@ public class Board extends JFrame implements ActionListener{
 	
 	//objects that are added to the content pane (through the Screen)
 	private Board board;
-	private Screen screen;
+	public Screen screen;
 	
 	//constructor
-	public Board(NeuralNetwork network){
+	public Board(){
 		//set the title of the frame
 		super("Paddle Ball");
 		
@@ -93,7 +93,7 @@ public class Board extends JFrame implements ActionListener{
 		this.setJMenuBar(menubar);
 		
 		//draw the components
-		screen = new Screen(p1, p2, b, sb, this, network);
+		screen = new Screen(p1, p2, b, sb, this);
 		this.getContentPane().add(screen);
 
 		//System.out.println(fitnessValue());
