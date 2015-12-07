@@ -145,7 +145,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
         //determine if there is a winner
         if(score.p1Wins() || score.p2Wins()){
-			System.out.println("This hit " + paddleHit);
+			//System.out.println("This hit " + paddleHit);
 			gameover = true;
             //paddleHit = 0;
         }
