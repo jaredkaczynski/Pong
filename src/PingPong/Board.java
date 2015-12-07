@@ -51,9 +51,8 @@ public class Board extends JFrame implements ActionListener{
 	public Board(){
 		//set the title of the frame
 		super("Paddle Ball");
-		
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		board = this;
-		
 		//get screen information
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		Dimension screenDimension = kit.getScreenSize();
