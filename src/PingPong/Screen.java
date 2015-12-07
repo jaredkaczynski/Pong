@@ -199,7 +199,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             }else{
                 //System.out.println("player 2");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                System.out.println(input);
+                //System.out.println(input);
                 /*
                 neuralNetwork.setInput(input);
                 neuralNetwork.calculate();
