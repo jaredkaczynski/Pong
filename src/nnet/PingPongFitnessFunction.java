@@ -181,7 +181,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             // calculate fitness, sum of multiple trials
             int fitness = 0;
             for ( int i = 0; i < numTrials; i++ )
-                System.out.println("Trial for");
+                //System.out.println("Trial for");
                 fitness += singleTrial( activator );
             c.setFitnessValue( fitness );
         }
@@ -195,7 +195,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         double energyUsed = 0;
         double f2 = 0.0;
         int fitness = 0;
-        System.out.println("trial");
+        //System.out.println("trial");
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
         Board trial = new Board();

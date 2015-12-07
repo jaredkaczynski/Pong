@@ -111,7 +111,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         catch(InterruptedException e){
 
         }*/
-        System.out.println(action + " this is the input for move");
+        //System.out.println(action + " this is the input for move");
         moveBall();
         movePlayer(1);
         movePlayer(2);
@@ -145,10 +145,8 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
         //determine if there is a winner
         if(score.p1Wins() || score.p2Wins()){
-            gameover = true;
-            setVisible(false); //you can't see me!
-            board.setVisible(false);
-            thread.interrupt();
+			System.out.println("This hit " + paddleHit);
+			gameover = true;
             //paddleHit = 0;
         }
         double[] inputArray = {b.getY(),b.getY(),p1.getY()};
