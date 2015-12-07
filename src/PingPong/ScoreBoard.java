@@ -4,7 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-package PingPong.world;
+package PingPong;
 import java.awt.Color;
 import java.awt.Font;
 

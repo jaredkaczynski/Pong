@@ -4,7 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-package PingPong.world;
+package PingPong;
 import org.neuroph.core.NeuralNetwork;
 
 import java.awt.*;
