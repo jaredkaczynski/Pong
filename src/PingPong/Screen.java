@@ -1,12 +1,10 @@
-package PingPong.world;
+package PingPong;
 /*
     Screen.java - Paddle Ball Game
 	Contributer(s): Ron Parrott
 	
     Contact: opengamesbeginners@gmail.com
 */
-
-import org.neuroph.core.NeuralNetwork;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -52,10 +50,9 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
     //learning stuff
     int paddleHit = 0;
-    private NeuralNetwork neuralNetwork;
 
 	//constructor
-	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board, NeuralNetwork network){
+	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board){
 		//set player 1 information
 		p1 = player_1;
 		
@@ -74,7 +71,6 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		//Screen details
 		this.setFocusable(true);
 		this.addKeyListener(this);
-		this.neuralNetwork = network;
 		this.add(score);
 		
 		thread = new Thread(this);
@@ -108,6 +104,44 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
+    public int[] step() {
+        try{
+            Thread.sleep(1);
+        }
+        catch(InterruptedException e){
+
+        }
+
+        moveBall();
+        movePlayer(1);
+        movePlayer(2);
+        if(b.getX() <300){
+            //System.out.println("player 1");
+            double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
+        }else{
+            //System.out.println("player 2");
+            double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
+            System.out.println(input);
+            /*
+            neuralNetwork.setInput(input);
+            neuralNetwork.calculate();
+            System.out.println(neuralNetwork.getOutput()[0]);
+
+            if(neuralNetwork.getOutput()[0] > 0){
+                p2_down = true;
+                p2_up = false;
+            } else {
+                p2_down = false;
+                p2_up = true;
+            }*/
+        }
+
+        //determine if there is a winner
+        if(score.p1Wins() || score.p2Wins()){
+            gameover = true;
+            //paddleHit = 0;
+        }
+    }
 	public void run() {
 		// TODO Auto-generated method stub
 		
@@ -136,14 +170,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             if(b.getX() <300){
                 //System.out.println("player 1");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                //myMlPerceptron.setInput(input);
+                /*//myMlPerceptron.setInput(input);
                 //myMlPerceptron.calculate();
                 neuralNetwork.setInput(input);
                 neuralNetwork.calculate();
-                /*p2_down = false;
+                p2_down = false;
                 p2_up = false;
                 p1_up = false;
-                p1_down = false;*/
+                p1_down = false;
                 System.out.println(neuralNetwork.getOutput()[0]);
 
                 if(neuralNetwork.getOutput()[0] > 0){
@@ -152,11 +186,12 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 } else {
                     p1_down = true;
                     p1_up = false;
-                }
+                }*/
             }else{
                 //System.out.println("player 2");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
                 System.out.println(input);
+                /*
                 neuralNetwork.setInput(input);
                 neuralNetwork.calculate();
                 //double paddlePosition = (myMlPerceptron.getOutput()[0]);
@@ -168,13 +203,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 } else {
                     p2_down = false;
                     p2_up = true;
-                }
+                }*/
             }
 
 			//determine if there is a winner
 			if(score.p1Wins() || score.p2Wins()){
 				gameover = true;
-                paddleHit = 0;
+
+				//paddleHit = 0;
 				break;
 			}
 		}
