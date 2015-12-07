@@ -4,6 +4,7 @@ package nnet;
  * Created by Jared on 06-Dec-15.
  */
 
+import com.anji.neat.Evolver;
 import org.apache.log4j.Logger;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
@@ -39,6 +40,9 @@ public class PingPongEvaluator {
                 throw new IllegalArgumentException("no chromosome found: " + args[1]);
             //ff.enableDisplay();
             ff.evaluate(chrom);
+            Evolver evolver = new Evolver();
+            evolver.init( props );
+            evolver.run();
             logger.info("Fitness = " + chrom.getFitnessValue());
         }
 

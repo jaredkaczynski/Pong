@@ -176,6 +176,7 @@ public class PingPongFitnessFunction {
             // calculate fitness, sum of multiple trials
             int fitness = 0;
             for ( int i = 0; i < numTrials; i++ )
+                System.out.println("Trial for");
                 fitness += singleTrial( activator );
             c.setFitnessValue( fitness );
         }
@@ -211,22 +212,20 @@ public class PingPongFitnessFunction {
         double energyUsed = 0;
         double f2 = 0.0;
         int fitness = 0;
-
+        System.out.println("trial");
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
         Board trial = new Board();
         double[] networkInput;
         networkInput = trial.screen.step(50);
-
+        //System.out.println(networkInput);
         for (currentTimestep = 0; currentTimestep < maxTimesteps; currentTimestep++) {
             // Network activation values
 
-
-
-            // Store the accumulated state variables for cart and pole 1 within the oscillation buffer.
             // Activate the network.
 
             double networkOutput = activator.next(networkInput)[0];
+            //System.out.println(networkOutput);
             trial.screen.step(networkOutput);
             energyUsed += networkOutput;
             /*
@@ -241,101 +240,6 @@ public class PingPongFitnessFunction {
         }
         return fitness;
     }
-    /*
-    private void performAction( double output, double[] state ) {
-        int i;
-        double[] dydx = new double[ 6 ];
-
-        boolean RK4 = true; //Set to Runge-Kutta 4th order integration method
-        double EULER_TAU = TIME_DELTA / 4;
-
-	//--- Apply action to the simulated cart-pole --
-        if ( RK4 ) {
-            for ( i = 0; i < 2; ++i ) {
-                dydx[ 0 ] = state[ 1 ];
-                dydx[ 2 ] = state[ 3 ];
-                dydx[ 4 ] = state[ 5 ];
-                step( output, state, dydx );
-                rk4( output, state, dydx, state );
-            }
-        }
-        else {
-            for ( i = 0; i < 8; ++i ) {
-                step( output, state, dydx );
-                state[ 0 ] += EULER_TAU * dydx[ 0 ];
-                state[ 1 ] += EULER_TAU * dydx[ 1 ];
-                state[ 2 ] += EULER_TAU * dydx[ 2 ];
-                state[ 3 ] += EULER_TAU * dydx[ 3 ];
-                state[ 4 ] += EULER_TAU * dydx[ 4 ];
-                state[ 5 ] += EULER_TAU * dydx[ 5 ];
-            }
-        }
-    }
-    */
-    /*
-    private void step( double action, double[] st, double[] derivs ) {
-        double force, costheta_1, costheta_2, sintheta_1, sintheta_2, gsintheta_1, gsintheta_2, temp_1, temp_2, ml_1, ml_2, fi_1, fi_2, mi_1, mi_2;
-
-        force = ( action - 0.5 ) * FORCE_MAG * 2;
-        costheta_1 = Math.cos( st[ 2 ] );
-        sintheta_1 = Math.sin( st[ 2 ] );
-        gsintheta_1 = GRAVITY * sintheta_1;
-        costheta_2 = Math.cos( st[ 4 ] );
-        sintheta_2 = Math.sin( st[ 4 ] );
-        gsintheta_2 = GRAVITY * sintheta_2;
-
-        ml_1 = poleLength1 * poleMass1;
-        ml_2 = poleLength2 * poleMass2;
-        temp_1 = MUP * st[ 3 ] / ml_1;
-        temp_2 = MUP * st[ 5 ] / ml_2;
-
-        fi_1 = ( ml_1 * st[ 3 ] * st[ 3 ] * sintheta_1 )
-                + ( 0.75 * poleMass1 * costheta_1 * ( temp_1 + gsintheta_1 ) );
-
-        fi_2 = ( ml_2 * st[ 5 ] * st[ 5 ] * sintheta_2 )
-                + ( 0.75 * poleMass2 * costheta_2 * ( temp_2 + gsintheta_2 ) );
-
-        mi_1 = poleMass1 * ( 1 - ( 0.75 * costheta_1 * costheta_1 ) );
-        mi_2 = poleMass2 * ( 1 - ( 0.75 * costheta_2 * costheta_2 ) );
-
-        derivs[ 1 ] = ( force + fi_1 + fi_2 ) / ( mi_1 + mi_2 + MASSCART );
-        derivs[ 3 ] = -0.75 * ( derivs[ 1 ] * costheta_1 + gsintheta_1 + temp_1 ) / poleLength1;
-        derivs[ 5 ] = -0.75 * ( derivs[ 1 ] * costheta_2 + gsintheta_2 + temp_2 ) / poleLength2;
-    }
-
-    private void rk4( double f, double[] y, double[] dydx, double[] yout ) {
-        int i;
-
-        double hh, h6;
-        double[] dym = new double[ 6 ];
-        double[] dyt = new double[ 6 ];
-        double[] yt = new double[ 6 ];
-
-        hh = TIME_DELTA * 0.5;
-        h6 = TIME_DELTA / 6.0;
-        for ( i = 0; i <= 5; i++ )
-            yt[ i ] = y[ i ] + hh * dydx[ i ];
-        step( f, yt, dyt );
-        dyt[ 0 ] = yt[ 1 ];
-        dyt[ 2 ] = yt[ 3 ];
-        dyt[ 4 ] = yt[ 5 ];
-        for ( i = 0; i <= 5; i++ )
-            yt[ i ] = y[ i ] + hh * dyt[ i ];
-        step( f, yt, dym );
-        dym[ 0 ] = yt[ 1 ];
-        dym[ 2 ] = yt[ 3 ];
-        dym[ 4 ] = yt[ 5 ];
-        for ( i = 0; i <= 5; i++ ) {
-            yt[ i ] = y[ i ] + TIME_DELTA * dym[ i ];
-            dym[ i ] += dyt[ i ];
-        }
-        step( f, yt, dyt );
-        dyt[ 0 ] = yt[ 1 ];
-        dyt[ 2 ] = yt[ 3 ];
-        dyt[ 4 ] = yt[ 5 ];
-        for ( i = 0; i <= 5; i++ )
-            yout[ i ] = y[ i ] + h6 * ( dydx[ i ] + dyt[ i ] + 2.0 * dym[ i ] );
-    }*/
 
     /**
      * @see org.jgap.BulkFitnessFunction#getMaxFitnessValue()
