@@ -24,11 +24,16 @@ public class PingPongEvaluator {
         public static void main( String[] args ) throws Exception {
             PingPongFitnessFunction ff = new PingPongFitnessFunction();
             Properties props = new Properties();
-            props.loadFromResource(args[0]);
+            props.loadFromResourceWithoutLogging(args[0]);
+            System.out.println("Working Directory = " +
+                    System.getProperty("user.dir"));
 
-            //ff.init(props);
-            Persistence db = (Persistence) props.newObjectProperty("persistence");
+            ff.init(props);
+            java.lang.Object test = props.newObjectProperty(Persistence.PERSISTENCE_CLASS_KEY);
+            Persistence db =  (Persistence) test;
             Configuration config = new DummyConfiguration();
+            logger.info( "random genotype" );
+            db.init(props);
             Chromosome chrom = db.loadChromosome(args[1], config);
             if (chrom == null)
                 throw new IllegalArgumentException("no chromosome found: " + args[1]);

@@ -7,6 +7,9 @@ import java.util.Random;
 
 import PingPong.Board;
 import PingPong.Screen;
+import com.anji.util.Properties;
+import com.anji.util.Randomizer;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jgap.Chromosome;
 
@@ -117,7 +120,7 @@ public class PingPongFitnessFunction {
     private int numTrials = DEFAULT_NUM_TRIALS;
 
 
-    private final static Logger logger = Logger.getLogger( Board.class );
+    private final static Logger logger = Logger.getLogger( PingPongFitnessFunction.class );
 
     private ActivatorTranscriber factory;
 
@@ -131,24 +134,14 @@ public class PingPongFitnessFunction {
     /**
      * @see com.anji.util.Configurable#init(com.anji.util.Properties)
      */
-    /*
+
     public void init( Properties props ) throws Exception {
         try {
+            BasicConfigurator.configure();
             factory = (ActivatorTranscriber) props.singletonObjectProperty( ActivatorTranscriber.class );
             setTrackLength( props.getDoubleProperty( TRACK_LENGTH_KEY, DEFAULT_TRACK_LENGTH ) );
             maxTimesteps = props.getIntProperty( TIMESTEPS_KEY, DEFAULT_TIMESTEPS );
             numTrials = props.getIntProperty( NUM_TRIALS_KEY, DEFAULT_NUM_TRIALS );
-            poleAngleThreshold = props.getDoubleProperty( ANGLE_THRESHOLD_KEY, THIRTYSIX_DEGREES );
-            doInputVelocities = props.getBooleanProperty( INPUT_VELOCITY_KEY, true );
-            poleLength1 = ( props.getDoubleProperty( POLE_1_LENGTH_KEY, 0.5 ) / 2 );
-            poleMass1 = ( poleLength1 / 5 );
-            poleLength2 = ( props.getDoubleProperty( POLE_2_LENGTH_KEY, 0.05 ) / 2 );
-            poleMass2 = ( poleLength2 / 5 );
-            startPoleAngle1 = props.getDoubleProperty( START_POLE_ANGLE_1_KEY, ONE_DEGREE );
-            startPoleAngle2 = props.getDoubleProperty( START_POLE_ANGLE_2_KEY, 0 );
-            startPoleAngleRandom = props.getBooleanProperty( START_POLE_ANGLE_RANDOM_KEY, false );
-            penalizeEnergyUse = props.getBooleanProperty( PENALIZE_FOR_ENERGY_USE_KEY, false );
-            penalizeOscillations = props.getBooleanProperty( PENALIZE_OSCILLATIONS_KEY, false );
             Randomizer randomizer = (Randomizer) props.singletonObjectProperty( Randomizer.class );
             rand = randomizer.getRand();
         }
@@ -156,7 +149,7 @@ public class PingPongFitnessFunction {
             throw new IllegalArgumentException( "invalid properties: " + e.getClass().toString() + ": "
                     + e.getMessage() );
         }
-    }*/
+    }
 
     /**
      * @see org.jgap.BulkFitnessFunction#evaluate(java.util.List)
