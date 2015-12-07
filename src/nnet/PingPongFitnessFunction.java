@@ -221,21 +221,28 @@ public class PingPongFitnessFunction {
 
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
+        Board trial = new Board();
+        double[] networkInput;
+        networkInput = trial.screen.step(50);
+
         for (currentTimestep = 0; currentTimestep < maxTimesteps; currentTimestep++) {
             // Network activation values
-            double[] networkInput;
+
 
 
             // Store the accumulated state variables for cart and pole 1 within the oscillation buffer.
             // Activate the network.
+
             double networkOutput = activator.next(networkInput)[0];
+            trial.screen.step(networkOutput);
             energyUsed += networkOutput;
+            /*
             performAction(networkOutput, state);
             if (display != null) {
                 // display.setStatus( Arrays.toString( state ) );
                 display.step();
             }
-
+            */
             //SimulateTimestep(network.getOutputSignal(0)>0.5);
 
         }
@@ -347,10 +354,11 @@ public class PingPongFitnessFunction {
     /**
      * enable GUI display of pole balancing
      */
+    /*
     public void enableDisplay() {
         display = new PoleBalanceDisplay( trackLength, new double[] { poleLength1, poleLength2 },
                 maxTimesteps );
         display.setVisible( true );
-    }
+    }*/
 
 }

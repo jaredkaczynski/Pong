@@ -104,7 +104,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
-    public int[] step() {
+    public double[] step(double action) {
         try{
             Thread.sleep(1);
         }
@@ -118,6 +118,13 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         if(b.getX() <300){
             //System.out.println("player 1");
             double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
+            if(action > 50){
+                p2_down = true;
+                p2_up = false;
+            } else {
+                p2_down = false;
+                p2_up = true;
+            }
         }else{
             //System.out.println("player 2");
             double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
@@ -126,14 +133,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             neuralNetwork.setInput(input);
             neuralNetwork.calculate();
             System.out.println(neuralNetwork.getOutput()[0]);
-
-            if(neuralNetwork.getOutput()[0] > 0){
+            */
+            if(action > 50){
                 p2_down = true;
                 p2_up = false;
             } else {
                 p2_down = false;
                 p2_up = true;
-            }*/
+            }
         }
 
         //determine if there is a winner
@@ -141,6 +148,8 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             gameover = true;
             //paddleHit = 0;
         }
+        double[] inputArray = {b.getY(),b.getY(),p1.getX(),p1.getY()};
+        return(inputArray);
     }
 	public void run() {
 		// TODO Auto-generated method stub
