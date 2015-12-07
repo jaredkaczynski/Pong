@@ -206,8 +206,8 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             // Network activation values
 
             // Activate the network.
-            networkInput = trial.screen.step(50);
-            System.out.println(activator.getInputDimension()+" This is the dimension");
+            networkInput = trial.screen.step(1);
+            //System.out.println(activator.getInputDimension()+" This is the dimension");
             double networkOutput = activator.next(networkInput)[0];
             trial.screen.step(networkOutput);
             energyUsed += networkOutput;
