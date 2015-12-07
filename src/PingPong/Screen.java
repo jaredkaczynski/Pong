@@ -118,7 +118,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         if(b.getX() <300){
             //System.out.println("player 1");
             double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-            if(action > 50){
+            if(action > .5){
                 p2_down = true;
                 p2_up = false;
             } else {
@@ -134,7 +134,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             neuralNetwork.calculate();
             System.out.println(neuralNetwork.getOutput()[0]);
             */
-            if(action > 50){
+            if(action > .5){
                 p2_down = true;
                 p2_up = false;
             } else {
