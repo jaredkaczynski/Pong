@@ -200,20 +200,24 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
         Board trial = new Board();
-        double[] networkInput = {198,300,2,175};
-        //System.out.println(networkInput);
-        for (currentTimestep = 0; currentTimestep < maxTimesteps; currentTimestep++) {
+        double[] neuralnetworkdataFROMPong = {198,300,175,175};
+        double[] networkOutput = activator.next(neuralnetworkdataFROMPong);
+        //System.out.println(neuralnetworkdataFROMPong);
+        while(true) {
             // Network activation values
 
             // Activate the network.
-            //networkInput = trial.screen.step(networkInput);
+            //neuralnetworkdataFROMPong = trial.screen.step(neuralnetworkdataFROMPong);
             //System.out.println(activator.getInputDimension()+" This is the dimension");
-            double[] networkOutput = activator.next(networkInput);
+            //System.out.println(neuralnetworkdataFROMPong[0] + " network input");
+            networkOutput = activator.next(neuralnetworkdataFROMPong);
+            //System.out.println(networkOutput.length);
+            //System.out.println(networkOutput[0] + " network output" + networkOutput[1]);
 
             /*if(networkOutput>0) {
                 System.out.println(networkOutput + " what the network will do");
             }*/
-            trial.screen.step(networkOutput);
+            neuralnetworkdataFROMPong = trial.screen.step(networkOutput);
             /*
             performAction(networkOutput, state);
             if (display != null) {
@@ -227,7 +231,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             }
         }
         fitness = trial.getfitness();
-        //System.out.println(getfitness + " getfitness");
+        //System.out.println(fitness + " getfitness");
         //trial.delete();
         return fitness;
     }
