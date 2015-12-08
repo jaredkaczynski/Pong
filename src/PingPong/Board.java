@@ -104,7 +104,9 @@ public class Board extends JFrame implements ActionListener{
 	public String getBackgroundImage(){
 		return background_img;
 	}
-	
+	public void delete(){
+		this.dispose();
+	}
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == fileRestart){
 			
