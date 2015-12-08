@@ -64,10 +64,9 @@ public class Board extends JFrame implements ActionListener{
 		
 		//set frame information
 		this.setSize(WIDTH, HEIGHT);;
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLocation(gameX, gameY);
-		this.setVisible(true);
+		this.setVisible(false);
 		
 		//create players
 		Player p1 = new Player(P1_X, P1_Y, P1_SPEED);	
@@ -100,6 +99,15 @@ public class Board extends JFrame implements ActionListener{
 		return (this.screen.paddleHit/(this.screen.paddleHit+this.screen.paddleMiss));
 	}
 	public boolean getfinished(){return this.screen.gameover;}
+	public void reset(){
+		Player p1 = new Player(P1_X, P1_Y, P1_SPEED);
+		Player p2 = new Player(P2_X, P2_Y, P2_SPEED);
+
+		//create ball
+		Ball b = new Ball(B_SPEED);
+		ScoreBoard sb = new ScoreBoard();
+		this.screen.reset( P1_Y, P1_SPEED, P2_Y, P2_SPEED, B_SPEED);
+	}
 
 
 	public String getBackgroundImage(){
