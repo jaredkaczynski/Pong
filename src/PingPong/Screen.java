@@ -45,7 +45,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-	private boolean realtime = true;
+	private boolean realtime = false;
 
     //learning stuff
     int paddleHit = 0;
@@ -134,15 +134,15 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			//}
         }else{
 
-            System.out.println(action[0] + " action a " + action[1]);
-            /*if(action[0] > .75){
+            //System.out.println(action[0] + " action a " + action[1]);
+            if(action[0] > .75){
                 p2_down = true;
                 p2_up = false;
             }
             if(action[1] > .75) {
                 p2_down = false;
                 p2_up = true;
-            }*/
+            }/*
             if(action[1] > .5 && p1.getY() > 0){
                 p1.setY(p1.getY() - p1.getSpeed());
             }
@@ -150,7 +150,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 p1.setY(p1.getY() + p1.getSpeed());
             }
             repaint();
-
+            */
         }
 
         //determine if there is a winner
