@@ -1,7 +1,5 @@
 package nnet;
 
-import java.io.Serializable;
-import java.nio.DoubleBuffer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -118,7 +116,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
 
     private int maxTimesteps = DEFAULT_TIMESTEPS;
 
-    private final static int DEFAULT_NUM_TRIALS = 10;
+    private final static int DEFAULT_NUM_TRIALS = 5;
 
     private int numTrials = DEFAULT_NUM_TRIALS;
 
@@ -171,14 +169,14 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
     }
 
     /**
-     * Evaluate chromosome and set fitness.
+     * Evaluate chromosome and set getfitness.
      * @param c
      */
     public void evaluate( Chromosome c ) {
         try {
             Activator activator = factory.newActivator( c );
 
-            // calculate fitness, sum of multiple trials
+            // calculate getfitness, sum of multiple trials
             int fitness = 0;
             for ( int i = 0; i < numTrials; i++ )
                 //System.out.println("Trial for");
@@ -217,10 +215,12 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             }
             */
             //SimulateTimestep(network.getOutputSignal(0)>0.5);
-
+            if(trial.getfinished()){
+                break;
+            }
         }
-        fitness = trial.fitness();
-        //System.out.println(fitness + " fitness");
+        fitness = trial.getfitness();
+        //System.out.println(getfitness + " getfitness");
         trial.delete();
         return fitness;
     }
@@ -229,7 +229,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
      * @see org.jgap.BulkFitnessFunction#getMaxFitnessValue()
      */
     public int getMaxFitnessValue() {
-        return ( numTrials * maxTimesteps );
+        return ( 100 );
     }
 
     /**
