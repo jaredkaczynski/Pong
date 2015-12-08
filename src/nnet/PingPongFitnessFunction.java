@@ -178,9 +178,12 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
 
             // calculate getfitness, sum of multiple trials
             int fitness = 0;
-            for ( int i = 0; i < numTrials; i++ )
-                //System.out.println("Trial for");
-                fitness += singleTrial( activator );
+            for ( int i = 0; i < numTrials; i++ ) {
+                fitness += singleTrial(activator);
+            }
+            if(fitness>0) {
+                System.out.println(fitness + " fitness");
+            }
             c.setFitnessValue( fitness );
         }
         catch ( Throwable e ) {
@@ -197,15 +200,19 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
         Board trial = new Board();
-        double[] networkInput;
+        double[] networkInput = {1,0};
         //System.out.println(networkInput);
         for (currentTimestep = 0; currentTimestep < maxTimesteps; currentTimestep++) {
             // Network activation values
 
             // Activate the network.
-            networkInput = trial.screen.step(20);
+            networkInput = trial.screen.step(networkInput);
             //System.out.println(activator.getInputDimension()+" This is the dimension");
-            double networkOutput = activator.next(networkInput)[0];
+            double[] networkOutput = activator.next(networkInput);
+
+            /*if(networkOutput>0) {
+                System.out.println(networkOutput + " what the network will do");
+            }*/
             trial.screen.step(networkOutput);
             /*
             performAction(networkOutput, state);
