@@ -46,7 +46,9 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	
 	//other info
 	private Thread thread;
-	private boolean gameover = false;
+	boolean gameover = false;
+
+	private boolean realtime = false;
 
     //learning stuff
     int paddleHit = 0;
@@ -105,19 +107,23 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
     public double[] step(double action) {
-        /*try{
-            Thread.sleep(1);
+		if(realtime) {
+        try{
+            Thread.sleep(10);
         }
         catch(InterruptedException e){
 
-        }*/
+        }
+		}
         //System.out.println(action + " this is the input for move");
         moveBall();
         movePlayer(1);
         movePlayer(2);
         if(b.getX() <300){
-            //System.out.println("player 1");
-            double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
+			//System.out.println("player 1");
+			//while((b.getX()<300)) {
+
+				double[] input = {b.getX(), b.getY(), p1.getX(), p1.getY(), p1.getSpeed()};
             /*if(action > 1){
                 p2_down = true;
                 p2_up = false;
@@ -125,8 +131,11 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 p2_down = false;
                 p2_up = true;
             }*/
-            p1.setY(b.getY());
+				moveBall();
+				p1.setY(b.getY());
+			//}
         }else{
+
             //System.out.println("player 2");
             double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
             /*
@@ -141,12 +150,15 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 p2_down = false;
                 p2_up = true;
             }
+
         }
 
         //determine if there is a winner
         if(score.p1Wins() || score.p2Wins()){
 			//System.out.println("This hit " + paddleHit);
 			gameover = true;
+			/*this.thread.interrupt();
+			this.board.delete();*/
             //paddleHit = 0;
         }
         double[] inputArray = {b.getY(),b.getY(),p1.getY()};

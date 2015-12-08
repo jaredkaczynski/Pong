@@ -96,9 +96,11 @@ public class Board extends JFrame implements ActionListener{
 
 		//System.out.println(fitnessValue());
 	}
-	public int fitness(){
+	public int getfitness(){
 		return this.screen.paddleHit;
 	}
+	public boolean getfinished(){return this.screen.gameover;}
+
 
 	public String getBackgroundImage(){
 		return background_img;
