@@ -113,7 +113,12 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
         }
 		}
-        //System.out.println(action[0] + " this is the input for move" + action[1]);
+
+        System.out.println(action[0] + " this is the input for move" + action[1]);
+
+        //double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
+        double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p1.getY()/400.0,p2.getY()/400.0};
+
         moveBall();
         movePlayer(1);
         movePlayer(2);
@@ -135,11 +140,11 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         }else{
 
             //System.out.println(action[0] + " action a " + action[1]);
-            if(action[0] > 0){
+            if(action[0] > .75){
                 p2_down = true;
                 p2_up = false;
             }
-            if(action[1] > 0){
+            if(action[1] > .75){
                 p2_down = false;
                 p2_up = true;
             }
@@ -163,8 +168,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			this.board.delete();*/
             //paddleHit = 0;
         }
-        double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
-        //double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p1.getY()/400.0,p2.getY()/400.0};
+
         //System.out.println(b.getY()/400.0 + " " + b.getX()/600.0 + " " + b.getSpeed() + " " + p2.getY()/400.0);
         //System.out.println(b.getY() + " " + b.getX() + " " + p1.getY() + " " + p2.getY());
         return(inputArray);
