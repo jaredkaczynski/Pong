@@ -192,10 +192,10 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         }
     }
 
-    private int singleTrial( Activator activator ) {
+    private double singleTrial( Activator activator ) {
         double energyUsed = 0;
         double f2 = 0.0;
-        int fitness = 0;
+        double fitness = 0;
         //System.out.println("trial");
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
@@ -209,11 +209,14 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             // Activate the network.
             //neuralnetworkdataFROMPong = trial.screen.step(neuralnetworkdataFROMPong);
             //System.out.println(activator.getInputDimension()+" This is the dimension");
-            System.out.println(neuralnetworkdataFROMPong[0] + " network input" + neuralnetworkdataFROMPong[1] + " ");
+            if(trial.getRealTime()) {
+                //System.out.println(neuralnetworkdataFROMPong[0] + " network input" + neuralnetworkdataFROMPong[1] + " ");
+            }
             networkOutput = activator.next(neuralnetworkdataFROMPong);
             //System.out.println(networkOutput.length);
-            System.out.println(networkOutput[0] + " network output" + networkOutput[1]);
-
+            if(trial.getRealTime()) {
+                //System.out.println(networkOutput[0] + " network output" + networkOutput[1]);
+            }
             /*if(networkOutput>0) {
                 System.out.println(networkOutput + " what the network will do");
             }*/
@@ -231,7 +234,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             }
         }
         fitness = trial.getfitness();
-        //System.out.println(fitness + " getfitness");
+        System.out.println(fitness + " getfitness");
         //trial.delete();
         return fitness;
     }

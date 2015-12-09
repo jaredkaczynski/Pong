@@ -5,7 +5,6 @@
     Contact: opengamesbeginners@gmail.com
 */
 package PingPong;
-import org.neuroph.core.NeuralNetwork;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -91,7 +90,7 @@ public class Board extends JFrame implements ActionListener{
 		
 		//draw the components
 		screen = new Screen(p1, p2, b, sb, this);
-        if(this.screen.realtime) {
+        if(this.screen.HumanSpeed) {
             this.setVisible(true);
         }else{
             this.setVisible(false);
@@ -100,8 +99,10 @@ public class Board extends JFrame implements ActionListener{
 
 		//System.out.println(fitnessValue());
 	}
-	public int getfitness(){
-		return (this.screen.paddleHit/(this.screen.paddleHit+this.screen.paddleMiss));
+	public double getfitness(){
+        double paddleHits = this.screen.paddleHit;
+        double paddleMisses = this.screen.paddleMiss;
+		return ((paddleHits)/(double)(paddleHits+paddleMisses));
 	}
 	public boolean getfinished(){return this.screen.gameover;}
 	public void reset(){
@@ -121,6 +122,7 @@ public class Board extends JFrame implements ActionListener{
 	public void delete(){
 		this.dispose();
 	}
+    public boolean getRealTime(){return this.screen.HumanSpeed;}
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == fileRestart){
 			
