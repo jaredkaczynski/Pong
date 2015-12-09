@@ -45,7 +45,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-    boolean realtime = false;
+    boolean HumanSpeed = true;
 
     //learning stuff
     int paddleHit = 0;
@@ -105,9 +105,9 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
     public double[] step(double[] action) {
-		if(realtime) {
+		if(HumanSpeed) {
         try{
-            Thread.sleep(10);
+            Thread.sleep(1);
         }
         catch(InterruptedException e){
 
@@ -280,6 +280,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b.setX(b.getX() - b.getSpeed());
 			b_right = false;
             paddleHit++;
+            System.out.println("I hit something");
 		}
 		else if(b_right && b.getX() < (this.getWidth() - b.getWidth())){ //if moving right and not at max
 			b.setX(b.getX() + b.getSpeed());
