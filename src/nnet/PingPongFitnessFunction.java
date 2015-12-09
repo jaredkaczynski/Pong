@@ -182,7 +182,10 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
                 fitness += singleTrial(activator)*100;
             }
             c.setFitnessValue( fitness );
-            System.out.println(fitness + " getfitness evaluate " + c.getFitnessValue());
+            if(fitness>500){
+                System.out.println(c.getId());
+            }
+            //System.out.println(fitness + " getfitness evaluate " + c.getFitnessValue());
         }
         catch ( Throwable e ) {
             logger.warn( "error evaluating chromosome " + c.toString(), e );

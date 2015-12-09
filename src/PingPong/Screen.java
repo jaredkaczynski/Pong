@@ -107,12 +107,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     public double[] step(double[] action) {
 		if(HumanSpeed) {
         try{
-            Thread.sleep(1);
+            Thread.sleep(3);
         }
         catch(InterruptedException e){
         }
 		}
-
+        if(paddleHit > 5000){
+            gameover = true;
+        }
         //System.out.println(action[0] + " this is the input for move" + action[1]);
 
         //double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
@@ -122,7 +124,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         movePlayer(1);
         //movePlayer(2);
         //System.out.println(paddleMiss + " Miss Hit " + paddleHit);
-        if(b.getX() <300){
+        //if(b.getX() <300){
 			//System.out.println("player 1");
 			//while((b.getX()<300)) {
                 double[] input = {b.getX(), b.getY(), p1.getX(), p1.getY(), p1.getSpeed()};
@@ -133,10 +135,10 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 p2_down = false;
                 p2_up = true;
             }*/
-                moveBall();
+                //moveBall();
                 p1.setY(b.getY());
 			//}
-        }else{
+        //}else{
 
             if(Math.abs(action[1]) > .5){
                 p2_down = true;
@@ -160,7 +162,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             }
             repaint();
             */
-        }
+        //}
 
         //determine if there is a winner
         if(score.p1Wins() || score.p2Wins()){
@@ -278,7 +280,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b.setX(b.getX() - b.getSpeed());
 			b_right = false;
             paddleHit++;
-            System.out.println("I hit something");
+            //System.out.println("I hit something");
 		}
 		else if(b_right && b.getX() < (this.getWidth() - b.getWidth())){ //if moving right and not at max
 			b.setX(b.getX() + b.getSpeed());
