@@ -66,7 +66,7 @@ public class Board extends JFrame implements ActionListener{
 		this.setSize(WIDTH, HEIGHT);;
 		this.setResizable(false);
 		this.setLocation(gameX, gameY);
-		this.setVisible(false);
+
 		
 		//create players
 		Player p1 = new Player(P1_X, P1_Y, P1_SPEED);	
@@ -91,6 +91,11 @@ public class Board extends JFrame implements ActionListener{
 		
 		//draw the components
 		screen = new Screen(p1, p2, b, sb, this);
+        if(this.screen.realtime) {
+            this.setVisible(true);
+        }else{
+            this.setVisible(false);
+        }
 		this.getContentPane().add(screen);
 
 		//System.out.println(fitnessValue());

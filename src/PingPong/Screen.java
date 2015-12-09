@@ -45,7 +45,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-	private boolean realtime = false;
+    boolean realtime = false;
 
     //learning stuff
     int paddleHit = 0;
@@ -114,14 +114,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         }
 		}
 
-        System.out.println(action[0] + " this is the input for move" + action[1]);
+        //System.out.println(action[0] + " this is the input for move" + action[1]);
 
         //double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
         double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p1.getY()/400.0,p2.getY()/400.0};
 
         moveBall();
         movePlayer(1);
-        movePlayer(2);
+        //movePlayer(2);
         //System.out.println(paddleMiss + " Miss Hit " + paddleHit);
         if(b.getX() <300){
 			//System.out.println("player 1");
@@ -140,15 +140,19 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         }else{
 
             //System.out.println(action[0] + " action a " + action[1]);
-            if(action[0] > .75){
+            if(Math.abs(action[1]) > .5){
                 p2_down = true;
                 p2_up = false;
-            }
-            if(action[1] > .75){
+            } else {
                 p2_down = false;
                 p2_up = true;
             }
-            movePlayer(2);
+            if(Math.abs(action[0]) > .5 && p2.getY() > 0){
+                p2.setY(p2.getY() - p2.getSpeed());
+            }
+            else if(Math.abs(action[1]) > .5 && p2.getY() < (this.getHeight() - p2.getHeight())){
+                p2.setY(p2.getY() + p2.getSpeed());
+            }
             /*
             if(action[1] > .5 && p1.getY() > 0){
                 p1.setY(p1.getY() - p1.getSpeed());
