@@ -179,12 +179,10 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             // calculate getfitness, sum of multiple trials
             int fitness = 0;
             for ( int i = 0; i < numTrials; i++ ) {
-                fitness += singleTrial(activator);
-            }
-            if(fitness>0) {
-                System.out.println(fitness + " fitness");
+                fitness += singleTrial(activator)*100;
             }
             c.setFitnessValue( fitness );
+            System.out.println(fitness + " getfitness evaluate " + c.getFitnessValue());
         }
         catch ( Throwable e ) {
             logger.warn( "error evaluating chromosome " + c.toString(), e );
@@ -234,8 +232,9 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             }
         }
         fitness = trial.getfitness();
-        System.out.println(fitness + " getfitness");
-        //trial.delete();
+        //if(fitness>0)
+        //System.out.println(fitness + " getfitness");
+        trial.delete();
         return fitness;
     }
 

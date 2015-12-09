@@ -45,7 +45,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-    boolean HumanSpeed = true;
+    boolean HumanSpeed = false;
 
     //learning stuff
     int paddleHit = 0;
@@ -110,7 +110,6 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             Thread.sleep(1);
         }
         catch(InterruptedException e){
-
         }
 		}
 
@@ -139,7 +138,6 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			//}
         }else{
 
-            //System.out.println(action[0] + " action a " + action[1]);
             if(Math.abs(action[1]) > .5){
                 p2_down = true;
                 p2_up = false;

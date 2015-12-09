@@ -93,7 +93,7 @@ public class Board extends JFrame implements ActionListener{
         if(this.screen.HumanSpeed) {
             this.setVisible(true);
         }else{
-            this.setVisible(false);
+            this.setVisible(true);
         }
 		this.getContentPane().add(screen);
 
