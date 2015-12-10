@@ -191,6 +191,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             logger.warn( "error evaluating chromosome " + c.toString(), e );
             c.setFitnessValue( 0 );
         }
+        //System.out.println("Hi this is a test");
     }
 
     private double singleTrial( Activator activator ) {
@@ -209,7 +210,6 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
 
             // Activate the network.
             //neuralnetworkdataFROMPong = trial.screen.step(neuralnetworkdataFROMPong);
-            System.out.println(activator.getInputDimension()+" This is the dimension");
             if(trial.getRealTime()) {
                 //System.out.println(neuralnetworkdataFROMPong[0] + " network input" + neuralnetworkdataFROMPong[1] + " ");
             }

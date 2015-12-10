@@ -112,7 +112,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
         catch(InterruptedException e){
         }
 		}
-        if(paddleHit > 5000){
+        if(paddleHit > 50){
             gameover = true;
         }
         //System.out.println(action[0] + " this is the input for move" + action[1]);
