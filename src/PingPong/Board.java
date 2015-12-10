@@ -102,7 +102,8 @@ public class Board extends JFrame implements ActionListener{
 	public double getfitness(){
         double paddleHits = this.screen.paddleHit;
         double paddleMisses = this.screen.paddleMiss;
-		return ((paddleHits)/(double)(paddleHits+paddleMisses));
+		//return ((paddleHits)/(double)(paddleHits+paddleMisses));
+		return paddleHits;
 	}
 	public boolean getfinished(){return this.screen.gameover;}
 	public void reset(){
