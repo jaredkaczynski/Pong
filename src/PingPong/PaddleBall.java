@@ -4,7 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-package PingPong.world;
+package PingPong;
 import org.neuroph.core.NeuralNetwork;
 
 public class PaddleBall {
@@ -14,8 +14,7 @@ public class PaddleBall {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		NeuralNetwork network = null;
-		new Board(network);
+		new Board();
 	}
 
 }

@@ -3,9 +3,13 @@ package nnet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.nio.DoubleBuffer;
 
-import PingPong.world.Board;
+import PingPong.Board;
+import PingPong.Screen;
+import com.anji.util.Configurable;
+import com.anji.util.Properties;
+import com.anji.util.Randomizer;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jgap.BulkFitnessFunction;
 import org.jgap.Chromosome;
@@ -13,16 +17,12 @@ import org.jgap.Chromosome;
 import com.anji.imaging.IdentifyImageFitnessFunction;
 import com.anji.integration.Activator;
 import com.anji.integration.ActivatorTranscriber;
-import com.anji.util.Arrays;
-import com.anji.util.Configurable;
-import com.anji.util.Properties;
-import com.anji.util.Randomizer;
 
 
 /**
  * Created by Jared on 06-Dec-15.
  */
-public class PingPongFitnessFunction {
+public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable {
     private final static String TRACK_LENGTH_KEY = "polebalance.track.length";
 
     private final static String TIMESTEPS_KEY = "polebalance.timesteps";
@@ -104,7 +104,7 @@ public class PingPongFitnessFunction {
      */
     private static final double SEVENTYTWO_DEGREES = Math.PI / 2.5;
 
-    private PoleBalanceDisplay display = null;
+    private Screen display = null;
 
     private final static double DEFAULT_TRACK_LENGTH = 4.8;
 
@@ -116,35 +116,16 @@ public class PingPongFitnessFunction {
 
     private int maxTimesteps = DEFAULT_TIMESTEPS;
 
-    private final static int DEFAULT_NUM_TRIALS = 10;
+    private final static int DEFAULT_NUM_TRIALS = 5;
 
     private int numTrials = DEFAULT_NUM_TRIALS;
 
-    private double poleAngleThreshold = THIRTYSIX_DEGREES;
 
-    private final static Logger logger = Logger.getLogger( Board.class );
+
+
+    private final static Logger logger = Logger.getLogger( PingPongFitnessFunction.class );
 
     private ActivatorTranscriber factory;
-
-    private boolean doInputVelocities = true;
-
-    private double poleLength1 = 0.5;
-
-    private double poleMass1 = 0.1;
-
-    private double poleLength2 = 0.05;
-
-    private double poleMass2 = 0.01;
-
-    private double startPoleAngle1 = ONE_DEGREE;
-
-    private double startPoleAngle2 = 0;
-
-    private boolean startPoleAngleRandom = false;
-
-    private boolean penalizeEnergyUse = false;
-
-    private boolean penalizeOscillations = false;
 
     private Random rand;
 
@@ -156,24 +137,14 @@ public class PingPongFitnessFunction {
     /**
      * @see com.anji.util.Configurable#init(com.anji.util.Properties)
      */
-    /*
+
     public void init( Properties props ) throws Exception {
         try {
+            BasicConfigurator.configure();
             factory = (ActivatorTranscriber) props.singletonObjectProperty( ActivatorTranscriber.class );
             setTrackLength( props.getDoubleProperty( TRACK_LENGTH_KEY, DEFAULT_TRACK_LENGTH ) );
             maxTimesteps = props.getIntProperty( TIMESTEPS_KEY, DEFAULT_TIMESTEPS );
             numTrials = props.getIntProperty( NUM_TRIALS_KEY, DEFAULT_NUM_TRIALS );
-            poleAngleThreshold = props.getDoubleProperty( ANGLE_THRESHOLD_KEY, THIRTYSIX_DEGREES );
-            doInputVelocities = props.getBooleanProperty( INPUT_VELOCITY_KEY, true );
-            poleLength1 = ( props.getDoubleProperty( POLE_1_LENGTH_KEY, 0.5 ) / 2 );
-            poleMass1 = ( poleLength1 / 5 );
-            poleLength2 = ( props.getDoubleProperty( POLE_2_LENGTH_KEY, 0.05 ) / 2 );
-            poleMass2 = ( poleLength2 / 5 );
-            startPoleAngle1 = props.getDoubleProperty( START_POLE_ANGLE_1_KEY, ONE_DEGREE );
-            startPoleAngle2 = props.getDoubleProperty( START_POLE_ANGLE_2_KEY, 0 );
-            startPoleAngleRandom = props.getBooleanProperty( START_POLE_ANGLE_RANDOM_KEY, false );
-            penalizeEnergyUse = props.getBooleanProperty( PENALIZE_FOR_ENERGY_USE_KEY, false );
-            penalizeOscillations = props.getBooleanProperty( PENALIZE_OSCILLATIONS_KEY, false );
             Randomizer randomizer = (Randomizer) props.singletonObjectProperty( Randomizer.class );
             rand = randomizer.getRand();
         }
@@ -181,7 +152,7 @@ public class PingPongFitnessFunction {
             throw new IllegalArgumentException( "invalid properties: " + e.getClass().toString() + ": "
                     + e.getMessage() );
         }
-    }*/
+    }
 
     /**
      * @see org.jgap.BulkFitnessFunction#evaluate(java.util.List)
@@ -198,18 +169,23 @@ public class PingPongFitnessFunction {
     }
 
     /**
-     * Evaluate chromosome and set fitness.
+     * Evaluate chromosome and set getfitness.
      * @param c
      */
     public void evaluate( Chromosome c ) {
         try {
             Activator activator = factory.newActivator( c );
 
-            // calculate fitness, sum of multiple trials
+            // calculate getfitness, sum of multiple trials
             int fitness = 0;
-            for ( int i = 0; i < numTrials; i++ )
-                fitness += singleTrial( activator );
+            for ( int i = 0; i < numTrials; i++ ) {
+                fitness += singleTrial(activator)*100;
+            }
             c.setFitnessValue( fitness );
+            if(fitness>500){
+                System.out.println(c.getId());
+            }
+            //System.out.println(fitness + " getfitness evaluate " + c.getFitnessValue());
         }
         catch ( Throwable e ) {
             logger.warn( "error evaluating chromosome " + c.toString(), e );
@@ -217,260 +193,69 @@ public class PingPongFitnessFunction {
         }
     }
 
-    /**
-     * @return 6-dimensional array with the following data
-     *
-     * [0] - Cart Position (meters).
-     *
-     * [1] - Cart velocity (m/s).
-     *
-     * [2] - Pole 1 angle (radians)
-     *
-     * [3] - Pole 1 angular velocity (radians/sec).
-     *
-     * [4] - Pole 2 angle (radians)
-     *
-     * [5] - Pole 2 angular velocity (radians/sec).
-     */
-    /*
-    private double[] newState() {
-        double[] state = new double[ 6 ];
-        state[ 0 ] = state[ 1 ] = state[ 3 ] = state[ 5 ] = 0;
-        if ( startPoleAngleRandom ) {
-            state[ 2 ] = rand.nextGaussian() * startPoleAngle1;
-            state[ 4 ] = rand.nextGaussian() * startPoleAngle2;
-        }
-        else {
-            state[ 2 ] = startPoleAngle1;
-            state[ 4 ] = startPoleAngle2;
-        }
-        return state;
-    }
-
-    private int singleTrial( Activator activator ) {
-        double[] state = newState();
+    private double singleTrial( Activator activator ) {
         double energyUsed = 0;
         double f2 = 0.0;
-        int fitness = 0;
-        DoubleBuffer oscillBuffer = DoubleBuffer.allocate( 10000 );
-        logger.debug( "state = " + Arrays.toString( state ) );
-
+        double fitness = 0;
+        //System.out.println("trial");
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
-        for ( currentTimestep = 0; currentTimestep < maxTimesteps; currentTimestep++ ) {
+        Board trial = new Board();
+        double[] neuralnetworkdataFROMPong = {198,300,175,175};
+        double[] networkOutput = activator.next(neuralnetworkdataFROMPong);
+        //System.out.println(neuralnetworkdataFROMPong);
+        while(true) {
             // Network activation values
-            double[] networkInput;
-            if ( doInputVelocities ) {
-                // Markovian (With velocity info)
-
-                // Ken Stanley's implementation
-//			networkInput = new double[ 7 ];
-//			networkInput[ 0 ] = state[ 0 ] / trackLength;
-//			networkInput[ 1 ] = state[ 1 ] / 2.0;
-//			networkInput[ 2 ] = state[ 2 ] / 0.52;
-//			networkInput[ 3 ] = state[ 3 ] / 2.0;
-//			networkInput[ 4 ] = state[ 4 ] / 0.52;
-//			networkInput[ 5 ] = state[ 5 ] / 2.0;
-//			networkInput[ 6 ] = 1; // bias
-
-                // Colin Green's re-worked scaling
-                networkInput = new double[ 7 ];
-                networkInput[ 0 ] = state[ 0 ] / trackLengthHalfed;
-                networkInput[ 1 ] = state[ 1 ] / 0.75;
-                networkInput[ 2 ] = state[ 2 ] / poleAngleThreshold;
-                networkInput[ 3 ] = state[ 3 ];
-                networkInput[ 4 ] = state[ 4 ] / poleAngleThreshold;
-                networkInput[ 5 ] = state[ 5 ];
-                networkInput[ 6 ] = 1; // bias
-            }
-            else {
-                // Non-markovian (without velocity info)
-
-                // Ken's implementation
-//			networkInput = new double[ 4 ];
-//			networkInput[ 0 ] = state[ 0 ] / trackLength;
-//			networkInput[ 1 ] = state[ 2 ] / 0.52;
-//			networkInput[ 2 ] = state[ 4 ] / 0.52;
-//			networkInput[ 3 ] = 0.5; // bias
-
-                // Colin's re-worked scaling
-                networkInput = new double[ 4 ];
-                networkInput[ 0 ] = state[ 0 ] / trackLengthHalfed;
-                networkInput[ 1 ] = state[ 2 ] / poleAngleThreshold;
-                networkInput[ 2 ] = state[ 4 ] / poleAngleThreshold;
-                networkInput[ 3 ] = 1; // bias
-            }
-
-            // Store the accumulated state variables for cart and pole 1 within the oscillation buffer.
-            oscillBuffer.put(Math.abs(state[0]) + Math.abs(state[1]) +
-                    Math.abs(state[2]) + Math.abs(state[3]));
 
             // Activate the network.
-            double networkOutput = activator.next( networkInput )[ 0 ];
-            energyUsed += networkOutput;
-            performAction( networkOutput, state );
-            if ( display != null ) {
+            //neuralnetworkdataFROMPong = trial.screen.step(neuralnetworkdataFROMPong);
+            //System.out.println(activator.getInputDimension()+" This is the dimension");
+            if(trial.getRealTime()) {
+                //System.out.println(neuralnetworkdataFROMPong[0] + " network input" + neuralnetworkdataFROMPong[1] + " ");
+            }
+            networkOutput = activator.next(neuralnetworkdataFROMPong);
+            //System.out.println(networkOutput.length);
+            if(trial.getRealTime()) {
+                //System.out.println(networkOutput[0] + " network output" + networkOutput[1]);
+            }
+            /*if(networkOutput>0) {
+                System.out.println(networkOutput + " what the network will do");
+            }*/
+            neuralnetworkdataFROMPong = trial.screen.step(networkOutput);
+            /*
+            performAction(networkOutput, state);
+            if (display != null) {
                 // display.setStatus( Arrays.toString( state ) );
-                display.step( currentTimestep, state[ 0 ], new double[] { state[ 2 ], state[ 4 ] } );
+                display.step();
             }
-
+            */
             //SimulateTimestep(network.getOutputSignal(0)>0.5);
-
-            // Check for failure state. Has the cart run off the ends of the track or has the pole
-            // angle gone beyond the threshold.
-            if ( ( state[ 0 ] < -trackLengthHalfed ) || ( state[ 0 ] > trackLengthHalfed )
-                    || ( state[ 2 ] > poleAngleThreshold ) || ( state[ 2 ] < -poleAngleThreshold )
-                    || ( state[ 4 ] > poleAngleThreshold ) || ( state[ 4 ] < -poleAngleThreshold ) )
+            if(trial.getfinished()){
                 break;
-
-            if ( currentTimestep%1000==0 )
-            {
-                if ( currentTimestep > 99 )
-                {
-
-                    if(f2>0.0)
-                        f2 = 0.75 / f2;
-                }
-                fitness += 0.1 + 0.9*f2;
             }
         }
-
-        //Conditional for penalizing energy used.
-
-        if ( penalizeEnergyUse ) {
-            currentTimestep -= (int) ( energyUsed / 10 );
-        } else {
-            fitness = currentTimestep;
-        }
-
-        //Condition for penalizing oscillations.
-
-        if ( penalizeOscillations ) {
-            int remainder = currentTimestep%1000;
-            int f2_steps = Math.min(100, remainder);
-            f2=0.0;
-            for(int i=0; i<f2_steps; i++)
-            {
-                f2+=oscillBuffer.get();
-            }
-            fitness += 0.1*remainder + 0.9*f2;
-        } else {
-            fitness = currentTimestep;
-        }
-
-        logger.debug( "trial took " + currentTimestep + " steps" );
+        fitness = trial.getfitness();
+        //if(fitness>0)
+        //System.out.println(fitness + " getfitness");
+        trial.delete();
         return fitness;
-    }
-    */
-    /*
-    private void performAction( double output, double[] state ) {
-        int i;
-        double[] dydx = new double[ 6 ];
-
-        boolean RK4 = true; //Set to Runge-Kutta 4th order integration method
-        double EULER_TAU = TIME_DELTA / 4;
-
-	//--- Apply action to the simulated cart-pole --
-        if ( RK4 ) {
-            for ( i = 0; i < 2; ++i ) {
-                dydx[ 0 ] = state[ 1 ];
-                dydx[ 2 ] = state[ 3 ];
-                dydx[ 4 ] = state[ 5 ];
-                step( output, state, dydx );
-                rk4( output, state, dydx, state );
-            }
-        }
-        else {
-            for ( i = 0; i < 8; ++i ) {
-                step( output, state, dydx );
-                state[ 0 ] += EULER_TAU * dydx[ 0 ];
-                state[ 1 ] += EULER_TAU * dydx[ 1 ];
-                state[ 2 ] += EULER_TAU * dydx[ 2 ];
-                state[ 3 ] += EULER_TAU * dydx[ 3 ];
-                state[ 4 ] += EULER_TAU * dydx[ 4 ];
-                state[ 5 ] += EULER_TAU * dydx[ 5 ];
-            }
-        }
-    }
-    */
-    private void step( double action, double[] st, double[] derivs ) {
-        double force, costheta_1, costheta_2, sintheta_1, sintheta_2, gsintheta_1, gsintheta_2, temp_1, temp_2, ml_1, ml_2, fi_1, fi_2, mi_1, mi_2;
-
-        force = ( action - 0.5 ) * FORCE_MAG * 2;
-        costheta_1 = Math.cos( st[ 2 ] );
-        sintheta_1 = Math.sin( st[ 2 ] );
-        gsintheta_1 = GRAVITY * sintheta_1;
-        costheta_2 = Math.cos( st[ 4 ] );
-        sintheta_2 = Math.sin( st[ 4 ] );
-        gsintheta_2 = GRAVITY * sintheta_2;
-
-        ml_1 = poleLength1 * poleMass1;
-        ml_2 = poleLength2 * poleMass2;
-        temp_1 = MUP * st[ 3 ] / ml_1;
-        temp_2 = MUP * st[ 5 ] / ml_2;
-
-        fi_1 = ( ml_1 * st[ 3 ] * st[ 3 ] * sintheta_1 )
-                + ( 0.75 * poleMass1 * costheta_1 * ( temp_1 + gsintheta_1 ) );
-
-        fi_2 = ( ml_2 * st[ 5 ] * st[ 5 ] * sintheta_2 )
-                + ( 0.75 * poleMass2 * costheta_2 * ( temp_2 + gsintheta_2 ) );
-
-        mi_1 = poleMass1 * ( 1 - ( 0.75 * costheta_1 * costheta_1 ) );
-        mi_2 = poleMass2 * ( 1 - ( 0.75 * costheta_2 * costheta_2 ) );
-
-        derivs[ 1 ] = ( force + fi_1 + fi_2 ) / ( mi_1 + mi_2 + MASSCART );
-        derivs[ 3 ] = -0.75 * ( derivs[ 1 ] * costheta_1 + gsintheta_1 + temp_1 ) / poleLength1;
-        derivs[ 5 ] = -0.75 * ( derivs[ 1 ] * costheta_2 + gsintheta_2 + temp_2 ) / poleLength2;
-    }
-
-    private void rk4( double f, double[] y, double[] dydx, double[] yout ) {
-        int i;
-
-        double hh, h6;
-        double[] dym = new double[ 6 ];
-        double[] dyt = new double[ 6 ];
-        double[] yt = new double[ 6 ];
-
-        hh = TIME_DELTA * 0.5;
-        h6 = TIME_DELTA / 6.0;
-        for ( i = 0; i <= 5; i++ )
-            yt[ i ] = y[ i ] + hh * dydx[ i ];
-        step( f, yt, dyt );
-        dyt[ 0 ] = yt[ 1 ];
-        dyt[ 2 ] = yt[ 3 ];
-        dyt[ 4 ] = yt[ 5 ];
-        for ( i = 0; i <= 5; i++ )
-            yt[ i ] = y[ i ] + hh * dyt[ i ];
-        step( f, yt, dym );
-        dym[ 0 ] = yt[ 1 ];
-        dym[ 2 ] = yt[ 3 ];
-        dym[ 4 ] = yt[ 5 ];
-        for ( i = 0; i <= 5; i++ ) {
-            yt[ i ] = y[ i ] + TIME_DELTA * dym[ i ];
-            dym[ i ] += dyt[ i ];
-        }
-        step( f, yt, dyt );
-        dyt[ 0 ] = yt[ 1 ];
-        dyt[ 2 ] = yt[ 3 ];
-        dyt[ 4 ] = yt[ 5 ];
-        for ( i = 0; i <= 5; i++ )
-            yout[ i ] = y[ i ] + h6 * ( dydx[ i ] + dyt[ i ] + 2.0 * dym[ i ] );
     }
 
     /**
      * @see org.jgap.BulkFitnessFunction#getMaxFitnessValue()
      */
     public int getMaxFitnessValue() {
-        return ( numTrials * maxTimesteps );
+        return ( 100 );
     }
 
     /**
      * enable GUI display of pole balancing
      */
+    /*
     public void enableDisplay() {
         display = new PoleBalanceDisplay( trackLength, new double[] { poleLength1, poleLength2 },
                 maxTimesteps );
         display.setVisible( true );
-    }
+    }*/
 
 }

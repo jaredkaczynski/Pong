@@ -1,4 +1,4 @@
-package PingPong.world;
+package PingPong;
 /*
     Screen.java - Paddle Ball Game
 	Contributer(s): Ron Parrott
@@ -6,12 +6,7 @@ package PingPong.world;
     Contact: opengamesbeginners@gmail.com
 */
 
-import org.neuroph.core.NeuralNetwork;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -48,14 +43,16 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	
 	//other info
 	private Thread thread;
-	private boolean gameover = false;
+	boolean gameover = false;
+
+    boolean HumanSpeed = false;
 
     //learning stuff
     int paddleHit = 0;
-    private NeuralNetwork neuralNetwork;
+	int paddleMiss = 0;
 
 	//constructor
-	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board, NeuralNetwork network){
+	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board){
 		//set player 1 information
 		p1 = player_1;
 		
@@ -74,11 +71,10 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		//Screen details
 		this.setFocusable(true);
 		this.addKeyListener(this);
-		this.neuralNetwork = network;
 		this.add(score);
 		
-		thread = new Thread(this);
-		thread.start();	
+		//thread = new Thread(this);
+		//thread.start();
 	}
 	
 	public void paintComponent(Graphics g){
@@ -108,6 +104,79 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
+    public double[] step(double[] action) {
+		if(HumanSpeed) {
+        try{
+            Thread.sleep(3);
+        }
+        catch(InterruptedException e){
+        }
+		}
+        if(paddleHit > 5000){
+            gameover = true;
+        }
+        //System.out.println(action[0] + " this is the input for move" + action[1]);
+
+        //double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
+        double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p1.getY()/400.0,p2.getY()/400.0};
+
+        moveBall();
+        movePlayer(1);
+        //movePlayer(2);
+        //System.out.println(paddleMiss + " Miss Hit " + paddleHit);
+        //if(b.getX() <300){
+			//System.out.println("player 1");
+			//while((b.getX()<300)) {
+                double[] input = {b.getX(), b.getY(), p1.getX(), p1.getY(), p1.getSpeed()};
+            /*if(action > 1){
+                p2_down = true;
+                p2_up = false;
+            } else {
+                p2_down = false;
+                p2_up = true;
+            }*/
+                //moveBall();
+                p1.setY(b.getY());
+			//}
+        //}else{
+
+            if(Math.abs(action[1]) > .5){
+                p2_down = true;
+                p2_up = false;
+            } else {
+                p2_down = false;
+                p2_up = true;
+            }
+            if(Math.abs(action[0]) > .5 && p2.getY() > 0){
+                p2.setY(p2.getY() - p2.getSpeed());
+            }
+            else if(Math.abs(action[1]) > .5 && p2.getY() < (this.getHeight() - p2.getHeight())){
+                p2.setY(p2.getY() + p2.getSpeed());
+            }
+            /*
+            if(action[1] > .5 && p1.getY() > 0){
+                p1.setY(p1.getY() - p1.getSpeed());
+            }
+            else if(action[0] > .5 && p1.getY() < (this.getHeight() - p1.getHeight())){
+                p1.setY(p1.getY() + p1.getSpeed());
+            }
+            repaint();
+            */
+        //}
+
+        //determine if there is a winner
+        if(score.p1Wins() || score.p2Wins()){
+			//System.out.println("This hit " + paddleHit);
+			gameover = true;
+			/*this.thread.interrupt();
+			this.board.delete();*/
+            //paddleHit = 0;
+        }
+
+        //System.out.println(b.getY()/400.0 + " " + b.getX()/600.0 + " " + b.getSpeed() + " " + p2.getY()/400.0);
+        //System.out.println(b.getY() + " " + b.getX() + " " + p1.getY() + " " + p2.getY());
+        return(inputArray);
+    }
 	public void run() {
 		// TODO Auto-generated method stub
 		
@@ -136,14 +205,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             if(b.getX() <300){
                 //System.out.println("player 1");
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                //myMlPerceptron.setInput(input);
+                /*//myMlPerceptron.setInput(input);
                 //myMlPerceptron.calculate();
                 neuralNetwork.setInput(input);
                 neuralNetwork.calculate();
-                /*p2_down = false;
+                p2_down = false;
                 p2_up = false;
                 p1_up = false;
-                p1_down = false;*/
+                p1_down = false;
                 System.out.println(neuralNetwork.getOutput()[0]);
 
                 if(neuralNetwork.getOutput()[0] > 0){
@@ -152,11 +221,14 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 } else {
                     p1_down = true;
                     p1_up = false;
-                }
+                }*/
+
             }else{
                 //System.out.println("player 2");
+
                 double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                System.out.println(input);
+                //System.out.println(input);
+                /*
                 neuralNetwork.setInput(input);
                 neuralNetwork.calculate();
                 //double paddlePosition = (myMlPerceptron.getOutput()[0]);
@@ -168,13 +240,13 @@ public class Screen extends JPanel implements Runnable, KeyListener{
                 } else {
                     p2_down = false;
                     p2_up = true;
-                }
+                }*/
             }
 
 			//determine if there is a winner
 			if(score.p1Wins() || score.p2Wins()){
 				gameover = true;
-                paddleHit = 0;
+				//paddleHit = 0;
 				break;
 			}
 		}
@@ -208,6 +280,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b.setX(b.getX() - b.getSpeed());
 			b_right = false;
             paddleHit++;
+            //System.out.println("I hit something");
 		}
 		else if(b_right && b.getX() < (this.getWidth() - b.getWidth())){ //if moving right and not at max
 			b.setX(b.getX() + b.getSpeed());
@@ -216,19 +289,21 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b.setOriginalPos();
 			b_right = false;
 			score.pointP1();
+			paddleMiss++;
 			//cause a pause before the game resumes
+            /*
 			try{
 				Thread.sleep(500);
 			}
 			catch(InterruptedException e){
 				
-			}
+			}*/
 		}
 		
 		else if(!b_right && hitPaddle(false)){ //hits the left paddle
 			b.setX(b.getX() + b.getSpeed());
 			b_right = true;
-            paddleHit++;
+            //paddleHit++;
 		}
 		else if(!b_right && b.getX() > 0){ //if moving left, but not at max
 			b.setX(b.getX() - b.getSpeed());
@@ -238,12 +313,13 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b_right = true;
 			score.pointP2();
 			//cause a pause before the game resumes
+            /*
 			try{
 				Thread.sleep(500);
 			}
 			catch(InterruptedException e){
 				
-			}
+			}*/
 		}
 		
 		//y-direction motion

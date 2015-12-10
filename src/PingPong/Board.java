@@ -4,8 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-package PingPong.world;
-import org.neuroph.core.NeuralNetwork;
+package PingPong;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,8 +31,8 @@ public class Board extends JFrame implements ActionListener{
 	private final int P2_Y = 175;
 	
 	//speed of the players
-	private final int P1_SPEED = 2;
-	private final int P2_SPEED = 2;
+	private final int P1_SPEED = 1;
+	private final int P2_SPEED = 1;
 	
 	//speed of the ball
 	private final int B_SPEED = 2;
@@ -45,15 +44,13 @@ public class Board extends JFrame implements ActionListener{
 	
 	//objects that are added to the content pane (through the Screen)
 	private Board board;
-	private Screen screen;
+	public Screen screen;
 	
 	//constructor
-	public Board(NeuralNetwork network){
+	public Board(){
 		//set the title of the frame
 		super("Paddle Ball");
-		
 		board = this;
-		
 		//get screen information
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		Dimension screenDimension = kit.getScreenSize();
@@ -66,10 +63,9 @@ public class Board extends JFrame implements ActionListener{
 		
 		//set frame information
 		this.setSize(WIDTH, HEIGHT);;
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLocation(gameX, gameY);
-		this.setVisible(true);
+
 		
 		//create players
 		Player p1 = new Player(P1_X, P1_Y, P1_SPEED);	
@@ -93,19 +89,40 @@ public class Board extends JFrame implements ActionListener{
 		this.setJMenuBar(menubar);
 		
 		//draw the components
-		screen = new Screen(p1, p2, b, sb, this, network);
+		screen = new Screen(p1, p2, b, sb, this);
+        if(this.screen.HumanSpeed) {
+            this.setVisible(true);
+        }else{
+            this.setVisible(true);
+        }
 		this.getContentPane().add(screen);
 
 		//System.out.println(fitnessValue());
 	}
-	public int fitness(){
-		return this.screen.paddleHit;
+	public double getfitness(){
+        double paddleHits = this.screen.paddleHit;
+        double paddleMisses = this.screen.paddleMiss;
+		return ((paddleHits)/(double)(paddleHits+paddleMisses));
 	}
+	public boolean getfinished(){return this.screen.gameover;}
+	public void reset(){
+		Player p1 = new Player(P1_X, P1_Y, P1_SPEED);
+		Player p2 = new Player(P2_X, P2_Y, P2_SPEED);
+
+		//create ball
+		Ball b = new Ball(B_SPEED);
+		ScoreBoard sb = new ScoreBoard();
+		this.screen.reset( P1_Y, P1_SPEED, P2_Y, P2_SPEED, B_SPEED);
+	}
+
 
 	public String getBackgroundImage(){
 		return background_img;
 	}
-	
+	public void delete(){
+		this.dispose();
+	}
+    public boolean getRealTime(){return this.screen.HumanSpeed;}
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == fileRestart){
 			

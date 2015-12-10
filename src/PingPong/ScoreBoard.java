@@ -4,7 +4,7 @@
 	
     Contact: opengamesbeginners@gmail.com
 */
-package PingPong.world;
+package PingPong;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -18,7 +18,7 @@ public class ScoreBoard extends JPanel{
 	private int p2_score;
 	
 	//final score
-	private final int WINNING_SCORE = 30000;
+	private final int WINNING_SCORE = 10;
 	
 	//determine the winners
 	private boolean p1_wins = false;
