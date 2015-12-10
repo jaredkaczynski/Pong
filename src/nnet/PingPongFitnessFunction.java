@@ -209,7 +209,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
 
             // Activate the network.
             //neuralnetworkdataFROMPong = trial.screen.step(neuralnetworkdataFROMPong);
-            //System.out.println(activator.getInputDimension()+" This is the dimension");
+            System.out.println(activator.getInputDimension()+" This is the dimension");
             if(trial.getRealTime()) {
                 //System.out.println(neuralnetworkdataFROMPong[0] + " network input" + neuralnetworkdataFROMPong[1] + " ");
             }
