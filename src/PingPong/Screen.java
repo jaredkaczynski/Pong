@@ -114,12 +114,12 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 		}
         if(paddleHit > 100){
             gameover = true;
-			System.out.println("Paddle Hit game over");
+			System.out.println("Paddle Hit game over \n\n\n\n\n\n\n\n");
         }
         //System.out.println(action[0] + " this is the input for move" + action[1]);
 
         //double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
-        double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p1.getY()/400.0,p2.getY()/400.0};
+        double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p2.getY()/400.0};
 
         moveBall();
         movePlayer(1);

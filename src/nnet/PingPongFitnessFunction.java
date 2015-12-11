@@ -179,7 +179,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             // calculate getfitness, sum of multiple trials
             int fitness = 0;
             for ( int i = 0; i < numTrials; i++ ) {
-                fitness += singleTrial(activator)*100;
+                fitness += singleTrial(activator);
             }
             c.setFitnessValue( fitness );
             if(fitness>500){
@@ -245,7 +245,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
      * @see org.jgap.BulkFitnessFunction#getMaxFitnessValue()
      */
     public int getMaxFitnessValue() {
-        return ( 100 );
+        return ( 1 );
     }
 
     /**
