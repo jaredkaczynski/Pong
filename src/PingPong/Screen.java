@@ -45,7 +45,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-    boolean HumanSpeed = false;
+    boolean HumanSpeed = true;
 
     //learning stuff
     int paddleHit = 0;

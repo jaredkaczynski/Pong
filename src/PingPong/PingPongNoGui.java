@@ -1,5 +1,7 @@
 package PingPong;
 
+import javax.swing.*;
+
 /**
  * Created by razrs on 11-Dec-15.
  */
@@ -31,6 +33,39 @@ public class PingPongNoGui {
     //learning stuff
     int paddleHit = 0;
     int paddleMiss = 0;
+
+
+
+    private String background_img = "../pong/img/board.png";
+
+    //objects that actions are performed on
+    private JMenuItem fileRestart;
+
+
+    public PingPongNoGui(Player player_1, Player player_2, Ball ball, ScoreBoard score_board){
+
+        //set player 1 information
+        p1 = player_1;
+
+        //set player 2 information
+        p2 = player_2;
+
+        //set ball information
+        b = ball;
+
+        //set scoreboard information
+        score = score_board;
+
+    }
+    public double getfitness(){
+        double paddleHits = this.paddleHit;
+        double paddleMisses = this.paddleMiss;
+        //return ((paddleHits)/(double)(paddleHits+paddleMisses));
+        return paddleHits;
+    }
+    public boolean getfinished(){return this.gameover;}
+
+    public boolean getRealTime(){return this.HumanSpeed;}
 
 
     public double[] step(double[] action) {

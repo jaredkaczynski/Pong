@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import PingPong.Board;
-import PingPong.Screen;
+import PingPong.*;
 import com.anji.util.Configurable;
 import com.anji.util.Properties;
 import com.anji.util.Randomizer;
@@ -193,7 +192,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         }
     }
 
-    private double singleTrial( Activator activator ) {
+    private double singleTrial2( Activator activator ) {
         double energyUsed = 0;
         double f2 = 0.0;
         double fitness = 0;
@@ -238,6 +237,88 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         //if(fitness>0)
         //System.out.println(fitness + " getfitness");
         trial.delete();
+        return fitness;
+    }
+
+    private double singleTrial( Activator activator ) {
+        double energyUsed = 0;
+        double f2 = 0.0;
+        double fitness = 0;
+
+        //variables
+
+        //size of the board
+         final int WIDTH = 600;
+         final int HEIGHT = 400;
+
+        //starting location of the players
+        //player 1
+         final int P1_X = 30;
+         final int P1_Y = 175;
+        //player 2
+         final int P2_X = 550;
+         final int P2_Y = 175;
+
+        //speed of the players
+         final int P1_SPEED = 2;
+         final int P2_SPEED = 2;
+
+        //speed of the ball
+         final int B_SPEED = 2;
+
+
+        //create players
+        Player p1 = new Player(P1_X, P1_Y, P1_SPEED);
+        Player p2 = new Player(P2_X, P2_Y, P2_SPEED);
+
+        //create ball
+        Ball b = new Ball(B_SPEED);
+
+        //create the scoreboard
+        ScoreBoard sb = new ScoreBoard();
+
+        //System.out.println("trial");
+        // Run the pole-balancing simulation.
+        int currentTimestep = 0;
+        //Board trial = new Board();
+        PingPongNoGui trial = new PingPongNoGui(p1, p2, b, sb);
+        double[] neuralnetworkdataFROMPong = {198,300,175};
+        double[] networkOutput = activator.next(neuralnetworkdataFROMPong);
+        //System.out.println(neuralnetworkdataFROMPong);
+        while(true) {
+            // Network activation values
+
+            // Activate the network.
+            //neuralnetworkdataFROMPong = trial.screen.step(neuralnetworkdataFROMPong);
+            //System.out.println(activator.getInputDimension()+" This is the dimension");
+            if(trial.getRealTime()) {
+                //System.out.println(neuralnetworkdataFROMPong[0] + " network input" + neuralnetworkdataFROMPong[1] + " ");
+            }
+            networkOutput = activator.next(neuralnetworkdataFROMPong);
+            //System.out.println(networkOutput.length);
+            if(trial.getRealTime()) {
+                //System.out.println(networkOutput[0] + " network output" + networkOutput[1]);
+            }
+            /*if(networkOutput>0) {
+                System.out.println(networkOutput + " what the network will do");
+            }*/
+            neuralnetworkdataFROMPong = trial.step(networkOutput);
+            /*
+            performAction(networkOutput, state);
+            if (display != null) {
+                // display.setStatus( Arrays.toString( state ) );
+                display.step();
+            }
+            */
+            //SimulateTimestep(network.getOutputSignal(0)>0.5);
+            if(trial.getfinished()){
+                break;
+            }
+        }
+        fitness = trial.getfitness();
+        //if(fitness>0)
+        //System.out.println(fitness + " getfitness");
+        //trial.delete();
         return fitness;
     }
 

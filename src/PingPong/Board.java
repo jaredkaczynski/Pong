@@ -31,8 +31,8 @@ public class Board extends JFrame implements ActionListener{
 	private final int P2_Y = 175;
 	
 	//speed of the players
-	private final int P1_SPEED = 2;
-	private final int P2_SPEED = 2;
+	private final int P1_SPEED = 1;
+	private final int P2_SPEED = 1;
 	
 	//speed of the ball
 	private final int B_SPEED = 2;
