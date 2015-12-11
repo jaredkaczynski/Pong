@@ -141,13 +141,13 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			//}
         //}else{
 
-            if(Math.abs(action[1]) > .5){
+            /*if(Math.abs(action[1]) > .5){
                 p2_down = true;
                 p2_up = false;
             } else {
                 p2_down = false;
                 p2_up = true;
-            }
+            }*/
             if(Math.abs(action[0]) > .5 && p2.getY() > 0){
                 p2.setY(p2.getY() - p2.getSpeed());
             }
@@ -174,7 +174,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             //paddleHit = 0;
         }
 
-        //System.out.println(b.getY()/400.0 + " " + b.getX()/600.0 + " " + b.getSpeed() + " " + p2.getY()/400.0);
+        //System.out.println(b.getY()/400.0 + " " + b.getX()/600.0 + " " + p2.getY()/400.0);
         //System.out.println(b.getY() + " " + b.getX() + " " + p1.getY() + " " + p2.getY());
         return(inputArray);
     }

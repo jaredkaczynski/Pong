@@ -201,7 +201,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         // Run the pole-balancing simulation.
         int currentTimestep = 0;
         Board trial = new Board();
-        double[] neuralnetworkdataFROMPong = {198,300,175,175};
+        double[] neuralnetworkdataFROMPong = {198,300,175};
         double[] networkOutput = activator.next(neuralnetworkdataFROMPong);
         //System.out.println(neuralnetworkdataFROMPong);
         while(true) {
