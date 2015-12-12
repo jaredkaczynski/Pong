@@ -115,7 +115,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
 
     private int maxTimesteps = DEFAULT_TIMESTEPS;
 
-    private final static int DEFAULT_NUM_TRIALS = 5;
+    private final static int DEFAULT_NUM_TRIALS = 1;
 
     private int numTrials = DEFAULT_NUM_TRIALS;
 
@@ -180,7 +180,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             for ( int i = 0; i < numTrials; i++ ) {
                 fitness += singleTrial(activator);
             }
-            c.setFitnessValue( fitness );
+            c.setFitnessValue(100- fitness );
             if(fitness>500){
                 System.out.println(c.getId());
             }
@@ -192,7 +192,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
         }
     }
 
-    private double singleTrial2( Activator activator ) {
+    private double singleTrial( Activator activator ) {
         double energyUsed = 0;
         double f2 = 0.0;
         double fitness = 0;
@@ -233,14 +233,14 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
                 break;
             }
         }
-        fitness = trial.getfitness();
+        fitness = trial.getfitnessDistance();
         //if(fitness>0)
         //System.out.println(fitness + " getfitness");
         trial.delete();
         return fitness;
     }
 
-    private double singleTrial( Activator activator ) {
+    private double singleTrial2( Activator activator ) {
         double energyUsed = 0;
         double f2 = 0.0;
         double fitness = 0;
@@ -315,7 +315,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
                 break;
             }
         }
-        fitness = trial.getfitness();
+        fitness = trial.getfitnessDistance();
         //if(fitness>0)
         //System.out.println(fitness + " getfitness");
         //trial.delete();

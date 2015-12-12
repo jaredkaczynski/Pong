@@ -31,8 +31,8 @@ public class Board extends JFrame implements ActionListener{
 	private final int P2_Y = 175;
 	
 	//speed of the players
-	private final int P1_SPEED = 2;
-	private final int P2_SPEED = 2;
+	private final int P1_SPEED = 1;
+	private final int P2_SPEED = 1;
 	
 	//speed of the ball
 	private final int B_SPEED = 2;
@@ -104,6 +104,12 @@ public class Board extends JFrame implements ActionListener{
         double paddleMisses = this.screen.paddleMiss;
 		//return ((paddleHits)/(double)(paddleHits+paddleMisses));
 		return paddleHits;
+	}
+	public double getfitnessDistance(){
+		double paddleDistance = this.screen.paddleDistance;
+		//return ((paddleHits)/(double)(paddleHits+paddleMisses));
+		System.out.println(paddleDistance);
+		return paddleDistance;
 	}
 	public boolean getfinished(){return this.screen.gameover;}
 	public void reset(){

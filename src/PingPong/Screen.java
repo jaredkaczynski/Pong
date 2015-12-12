@@ -45,11 +45,12 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-    boolean HumanSpeed = true;
+    boolean HumanSpeed = false;
 
     //learning stuff
     int paddleHit = 0;
 	int paddleMiss = 0;
+    int paddleDistance = 0;
 
 	//constructor
 	public Screen(Player player_1, Player player_2, Ball ball, ScoreBoard score_board, Board game_board){
@@ -291,6 +292,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b_right = false;
 			score.pointP1();
 			paddleMiss++;
+            paddleDistance +=Math.abs(b.getY()-p2.getY());
 			//cause a pause before the game resumes
             /*
 			try{

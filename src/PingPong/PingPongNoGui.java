@@ -10,13 +10,11 @@ public class PingPongNoGui {
     //variables
     //player 1 information
     private Player p1;
-    private boolean p1_up = false;
-    private boolean p1_down = false;
+
 
     //player 2 information
     private Player p2;
-    private boolean p2_up = false;
-    private boolean p2_down = false;
+
 
     //ball information
     private Ball b;
@@ -33,8 +31,9 @@ public class PingPongNoGui {
     //learning stuff
     int paddleHit = 0;
     int paddleMiss = 0;
+    int paddleDistance = 0;
 
-    
+
 
 
     public PingPongNoGui(Player player_1, Player player_2, Ball ball, ScoreBoard score_board){
@@ -57,6 +56,11 @@ public class PingPongNoGui {
         double paddleMisses = this.paddleMiss;
         //return ((paddleHits)/(double)(paddleHits+paddleMisses));
         return paddleHits;
+    }
+    public double getfitnessDistance(){
+        double paddleHits = this.paddleDistance;
+        //return ((paddleHits)/(double)(paddleHits+paddleMisses));
+        return paddleDistance;
     }
     public boolean getfinished(){return this.gameover;}
 
@@ -113,6 +117,7 @@ public class PingPongNoGui {
             b_right = false;
             score.pointP1();
             paddleMiss++;
+            paddleDistance +=Math.abs(b.getY()-p2.getY());
         }
 
         else if(!b_right && hitPaddle(false)){ //hits the left paddle
