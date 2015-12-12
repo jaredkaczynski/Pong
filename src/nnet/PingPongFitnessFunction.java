@@ -260,8 +260,8 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
          final int P2_Y = 175;
 
         //speed of the players
-         final int P1_SPEED = 2;
-         final int P2_SPEED = 2;
+         final int P1_SPEED = 1;
+         final int P2_SPEED = 1;
 
         //speed of the ball
          final int B_SPEED = 2;
