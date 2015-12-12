@@ -103,21 +103,42 @@ public class PingPongNoGui {
     }
 
     public void moveBall(){
+        int tempPaddleHit = paddleHit+paddleMiss;
+
         //x-direction motion
         if(b_right && hitPaddle(true)){ //hits the right paddle
+            paddleHit++;
+            if(paddleHit + paddleMiss >tempPaddleHit){
+                paddleDistance +=Math.abs(b.getY()-p1.getY());
+                System.out.println(p2.getY() + " p2  y");
+            }
             b.setX(b.getX() - b.getSpeed());
             b_right = false;
-            paddleHit++;
+
+            //System.out.println("I hit something");
         }
         else if(b_right && b.getX() < (600 - b.getWidth())){ //if moving right and not at max
             b.setX(b.getX() + b.getSpeed());
         }
         else if(b_right && b.getX() >= (600 - b.getWidth())){ //if moving right, but at max (point for p2)
+            paddleMiss++;
+
+            if(paddleHit + paddleMiss >tempPaddleHit){
+                //System.out.println("\n\n\n\n\n\n\n\n");
+                paddleDistance +=Math.abs(b.getY()-p1.getY());
+                System.out.println(p2.getY() + " p2  y");
+            }
             b.setOriginalPos();
             b_right = false;
             score.pointP1();
-            paddleMiss++;
-            paddleDistance +=Math.abs(b.getY()-p2.getY());
+            //cause a pause before the game resumes
+            /*
+			try{
+				Thread.sleep(500);
+			}
+			catch(InterruptedException e){
+
+			}*/
         }
 
         else if(!b_right && hitPaddle(false)){ //hits the left paddle
@@ -132,6 +153,14 @@ public class PingPongNoGui {
             b.setOriginalPos();
             b_right = true;
             score.pointP2();
+            //cause a pause before the game resumes
+            /*
+			try{
+				Thread.sleep(500);
+			}
+			catch(InterruptedException e){
+
+			}*/
         }
 
         //y-direction motion
@@ -149,6 +178,7 @@ public class PingPongNoGui {
             b.setY(b.getY() - b.getSpeed());
             b_up = true;
         }
+
     }
 
     //method to determine if the ball hits the paddle

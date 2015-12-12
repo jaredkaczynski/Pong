@@ -180,10 +180,7 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             for ( int i = 0; i < numTrials; i++ ) {
                 fitness += singleTrial(activator);
             }
-            c.setFitnessValue(100- fitness );
-            if(fitness>500){
-                System.out.println(c.getId());
-            }
+            c.setFitnessValue(fitness );
             //System.out.println(fitness + " getfitness evaluate " + c.getFitnessValue());
         }
         catch ( Throwable e ) {
@@ -234,8 +231,9 @@ public class PingPongFitnessFunction implements BulkFitnessFunction,Configurable
             }
         }
         fitness = trial.getfitnessDistance();
-        //if(fitness>0)
-        //System.out.println(fitness + " getfitness");
+        fitness=2300-fitness;
+        if(fitness>2250)
+        System.out.println(fitness + " getfitness" +  trial.getfitnessDistance());
         trial.delete();
         return fitness;
     }

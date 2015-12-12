@@ -108,7 +108,7 @@ public class Board extends JFrame implements ActionListener{
 	public double getfitnessDistance(){
 		double paddleDistance = this.screen.paddleDistance;
 		//return ((paddleHits)/(double)(paddleHits+paddleMisses));
-		System.out.println(paddleDistance);
+		//System.out.println(paddleDistance);
 		return paddleDistance;
 	}
 	public boolean getfinished(){return this.screen.gameover;}

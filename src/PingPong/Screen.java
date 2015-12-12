@@ -45,7 +45,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	private Thread thread;
 	boolean gameover = false;
 
-    boolean HumanSpeed = false;
+    boolean HumanSpeed = true;
 
     //learning stuff
     int paddleHit = 0;
@@ -121,9 +121,9 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 
         //double[] inputArray = {b.getY(),b.getX(),p1.getY(),p2.getY()};
         double[] inputArray = {b.getY()/400.0,b.getX()/600.0,p2.getY()/400.0};
-
         moveBall();
-        movePlayer(1);
+
+        //movePlayer(1);
         //movePlayer(2);
         //System.out.println(paddleMiss + " Miss Hit " + paddleHit);
         //if(b.getX() <300){
@@ -139,7 +139,9 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             }*/
                 //moveBall();
                 p1.setY(b.getY());
-			//}
+                repaint();
+
+        //}
         //}else{
 
             /*if(Math.abs(action[1]) > .5){
@@ -151,10 +153,13 @@ public class Screen extends JPanel implements Runnable, KeyListener{
             }*/
             if(Math.abs(action[0]) > .5 && p2.getY() > 0){
                 p2.setY(p2.getY() - p2.getSpeed());
+                repaint();
             }
             else if(Math.abs(action[1]) > .5 && p2.getY() < (this.getHeight() - p2.getHeight())){
                 p2.setY(p2.getY() + p2.getSpeed());
+                repaint();
             }
+
             /*
             if(action[1] > .5 && p1.getY() > 0){
                 p1.setY(p1.getY() - p1.getSpeed());
@@ -181,79 +186,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
     }
 	public void run() {
 		// TODO Auto-generated method stub
-		
-		//sleep the thread so the game doesn't start too early
-		try{
-			Thread.sleep(1000);
-		}
-		catch(InterruptedException e){
-			
-		}
 
-
-		//run the game loop
-		while(true){
-			//allows for smooth motion of the game
-			try{
-				Thread.sleep(10);
-			}
-			catch(InterruptedException e){
-
-			}
-
-			moveBall();
-			movePlayer(1);
-			movePlayer(2);
-            if(b.getX() <300){
-                //System.out.println("player 1");
-                double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                /*//myMlPerceptron.setInput(input);
-                //myMlPerceptron.calculate();
-                neuralNetwork.setInput(input);
-                neuralNetwork.calculate();
-                p2_down = false;
-                p2_up = false;
-                p1_up = false;
-                p1_down = false;
-                System.out.println(neuralNetwork.getOutput()[0]);
-
-                if(neuralNetwork.getOutput()[0] > 0){
-                    p1_down = false;
-                    p1_up = true;
-                } else {
-                    p1_down = true;
-                    p1_up = false;
-                }*/
-
-            }else{
-                //System.out.println("player 2");
-
-                double[] input = {b.getX(),b.getY(),p1.getX(),p1.getY(),p1.getSpeed()};
-                //System.out.println(input);
-                /*
-                neuralNetwork.setInput(input);
-                neuralNetwork.calculate();
-                //double paddlePosition = (myMlPerceptron.getOutput()[0]);
-                //p2.setY((int) paddlePosition);
-                System.out.println(neuralNetwork.getOutput()[0]);
-                if(neuralNetwork.getOutput()[0] > 0){
-                    p2_down = true;
-                    p2_up = false;
-                } else {
-                    p2_down = false;
-                    p2_up = true;
-                }*/
-            }
-
-			//determine if there is a winner
-			if(score.p1Wins() || score.p2Wins()){
-				gameover = true;
-				//paddleHit = 0;
-				break;
-			}
-		}
-        // save the trained network into file
-        //myMlPerceptron.save(�test.nnet�);
     }
 	
 	public void movePlayer(int p){
@@ -277,22 +210,32 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 	}
 	
 	public void moveBall(){
-		//x-direction motion
+        int tempPaddleHit = paddleHit+paddleMiss;
+
+        //x-direction motion
 		if(b_right && hitPaddle(true)){ //hits the right paddle
+            paddleHit++;
 			b.setX(b.getX() - b.getSpeed());
 			b_right = false;
-            paddleHit++;
+
             //System.out.println("I hit something");
 		}
 		else if(b_right && b.getX() < (this.getWidth() - b.getWidth())){ //if moving right and not at max
 			b.setX(b.getX() + b.getSpeed());
 		}
 		else if(b_right && b.getX() >= (this.getWidth() - b.getWidth())){ //if moving right, but at max (point for p2)
-			b.setOriginalPos();
+            paddleMiss++;
+
+            if(paddleHit + paddleMiss >tempPaddleHit){
+                //System.out.println("\n\n\n\n\n\n\n\n");
+                paddleDistance = Math.abs(p2.getY()-b.getY());
+                System.out.println(paddleDistance + " paddle distance  y");
+                System.out.println(p2.getY() + " p2  y");
+                System.out.println(b.getY() + " b  y");
+            }
+			//b.setOriginalPos();
 			b_right = false;
 			score.pointP1();
-			paddleMiss++;
-            paddleDistance +=Math.abs(b.getY()-p2.getY());
 			//cause a pause before the game resumes
             /*
 			try{
@@ -340,6 +283,7 @@ public class Screen extends JPanel implements Runnable, KeyListener{
 			b.setY(b.getY() - b.getSpeed());
 			b_up = true;
 		}
+
 	}
 	
 	//method to determine if the ball hits the paddle
